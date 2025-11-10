@@ -1,8 +1,8 @@
 {
-  "name": "kuzu-wasm-docs",
+  "name": "lbug-wasm-docs",
   "version": "1.0.0",
-  "description": "WebAssembly version of Kùzu database",
-  "repository": "https://github.com/unswdb/kuzu-wasm",
+  "description": "WebAssembly version of Ladybug database",
+  "repository": "https://github.com/unswdb/lbug-wasm",
   "author": "DylanShang",
   "license": "MIT",
   "devDependencies": {

@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
-const kuzu_wasm = require('@kuzu/kuzu-wasm');
+const lbug_wasm = require('@lbug/lbug-wasm');
 const { getImportQueries } = require('../ldbc-sf01/get_query');
 
 async function initializeWasmConnection() {
@@ -8,11 +8,11 @@ async function initializeWasmConnection() {
   const targetDir = '/data';
   const importQueries = getImportQueries(targetDir);
 
-  const kuzu = await kuzu_wasm();
+  const lbug = await lbug_wasm();
 
   // Create data directory
-  if (!kuzu.FS.analyzePath(targetDir).exists) {
-    kuzu.FS.mkdir(targetDir);
+  if (!lbug.FS.analyzePath(targetDir).exists) {
+    lbug.FS.mkdir(targetDir);
   }
 
   // Copy csv files to wasm fs
@@ -25,18 +25,18 @@ async function initializeWasmConnection() {
       const filePath = path.join(csvPath, file);
       const content = await fs.readFile(filePath, 'utf8');
       const targetFilePath = path.join(targetDir, file);
-      kuzu.FS.writeFile(targetFilePath, content);
+      lbug.FS.writeFile(targetFilePath, content);
       console.log(`File ${file} copied to ${targetFilePath}`);
     }
   } catch (err) {
     console.error('Error reading directory:', err);
   }
 
-  const db = new kuzu.WebDatabase("memDB", 0, 0, false, false, 4194304 * 16 * 8);
-  const conn = new kuzu.WebConnection(db, 0);
+  const db = new lbug.WebDatabase("memDB", 0, 0, false, false, 4194304 * 16 * 8);
+  const conn = new lbug.WebConnection(db, 0);
 
   for (const query of importQueries) {
-    console.log("kuzu-wasm:" + query)
+    console.log("lbug-wasm:" + query)
     await conn.query(query);
   }
   

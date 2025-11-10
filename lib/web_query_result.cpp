@@ -9,8 +9,8 @@
 #include "utf8proc.h"
 #include "utf8proc_wrapper.h"
 
-using namespace kuzu::common;
-using namespace kuzu::utf8proc;
+using namespace lbug::common;
+using namespace lbug::utf8proc;
 
 //To do: getNext
 
@@ -68,8 +68,8 @@ void WebQueryResult::close() {
 //         case LogicalTypeID::UINT64:
 //             return val(value.getValue<uint64_t>());
 //         case LogicalTypeID::INT128: {
-//             kuzu::common::int128_t result = value.getValue<kuzu::common::int128_t>();
-//             std::string int128_string = kuzu::common::Int128_t::ToString(result);
+//             lbug::common::int128_t result = value.getValue<lbug::common::int128_t>();
+//             std::string int128_string = lbug::common::Int128_t::ToString(result);
 //             return val(int128_string.c_str());
 //         }
 //         case LogicalTypeID::FLOAT:

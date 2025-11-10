@@ -33,7 +33,7 @@ module.exports = Benchmark;
 
 //test code
 // const a = new Benchmark({"name":"testname"})
-// a.add("kuzu",async function(){
+// a.add("lbug",async function(){
 //     let sum=0
 //     for(i=0;i<1000;i++){
 //         sum += i

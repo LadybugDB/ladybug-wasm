@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(KUZU-WASM VERSION 0.7.0.0)
+project(LBUG-WASM VERSION 0.7.0.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s DISABLE_EXCEPTION_CATCHING=0")
@@ -12,10 +12,10 @@ if (EMSCRIPTEN)
     add_link_options("SHELL:-s USE_PTHREADS")
 endif()
 
-add_subdirectory(kuzu)
+add_subdirectory(lbug)
 include_directories(lib)
-add_executable(kuzu-wasm lib/web_bind.cpp lib/web_database.cpp lib/web_connection.cpp lib/web_prepared_statement.cpp lib/web_query_result.cpp)
-target_link_libraries(kuzu-wasm kuzu)
+add_executable(lbug-wasm lib/web_bind.cpp lib/web_database.cpp lib/web_connection.cpp lib/web_prepared_statement.cpp lib/web_query_result.cpp)
+target_link_libraries(lbug-wasm lbug)
 
 # Release build
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -51,7 +51,7 @@ endif()
 
 message(STATUS "WASM_LINK_FLAGS=${WASM_LINK_FLAGS}")
 set_target_properties(
-  kuzu-wasm
+  lbug-wasm
   PROPERTIES
     LINK_FLAGS
     "${WASM_LINK_FLAGS} \
@@ -66,7 +66,7 @@ set_target_properties(
     -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
     -lembind \
     -lidbfs.js \
-    -s MODULARIZE=1 -s EXPORT_NAME='kuzu_wasm' \
+    -s MODULARIZE=1 -s EXPORT_NAME='lbug_wasm' \
     -s NO_DISABLE_EXCEPTION_CATCHING \
     --embed-file ../../data/embeddings@/ \
     -s EXPORTED_RUNTIME_METHODS='[\"ccall\", \"stackSave\", \"wasmMemory\",\"stackAlloc\", \"stackRestore\",\"FS\",\"UTF8ToString\"]' \
@@ -74,7 +74,7 @@ set_target_properties(
     ")
 
     # --post-js ${CMAKE_SOURCE_DIR}/lib/postfix_module.js \
-    # --extern-pre-js ${CMAKE_SOURCE_DIR}/packages/kuzu-wasm/middleware/moduleArrow.js \
+    # --extern-pre-js ${CMAKE_SOURCE_DIR}/packages/lbug-wasm/middleware/moduleArrow.js \
     # --emit-tsd 'interface.d.ts' \
     # -sUSE_PTHREADS=1 -sPTHREAD_POOL_SIZE=4 \
     # -s PTHREAD_POOL_SIZE_STRICT=0

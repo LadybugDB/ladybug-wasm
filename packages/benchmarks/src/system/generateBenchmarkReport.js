@@ -3,7 +3,7 @@ const path = require('path');
 
 function generateBenchmarkReport(benchmarks) {
     // Generate the Markdown content
-    let mdContent = `| Query Group | Query Name | Mean Time - Kuzu_WASM (ms) | Mean Time - Kuzu_Node (ms) | Diff (Kuzu_WASM vs Kuzu_Node) |\n`;
+    let mdContent = `| Query Group | Query Name | Mean Time - Ladybug_WASM (ms) | Mean Time - Ladybug_Node (ms) | Diff (Ladybug_WASM vs Ladybug_Node) |\n`;
     mdContent += `| --- | --- | --- | --- | --- |\n`;
 
     benchmarks.forEach(bench => {

@@ -4,31 +4,31 @@ Emscripten provides the [`writeFile`](https://emscripten.org/docs/api_reference/
 ## Usage
 To write a file in the Emscripten file system, you can use the following syntax:
 ```javascript
-kuzu.FS.writeFile(path, data);
+Ladybug.FS.writeFile(path, data);
 ```
 - `path` (string) – The file to which to write data.
 - `data` (string|ArrayBufferView) – The data to write. A string will always be decoded as UTF-8.
 
 ## Example
 ```javascript
-kuzu.FS.writeFile("/user.csv", "Adam,30\nKarissa,40\nZhang,50\nNoura,2");
+Ladybug.FS.writeFile("/user.csv", "Adam,30\nKarissa,40\nZhang,50\nNoura,2");
 ```
 This will create a file named user.csv in the virtual file system, containing four rows of user data (name and age).
 
 ### Full Example
-Below is a complete example of how you can use the writeFile API to write a CSV file and import it into a Kuzu database:
+Below is a complete example of how you can use the writeFile API to write a CSV file and import it into a Ladybug database:
 ```javascript
-// Step 1: Initialize the Kuzu Database
-const db = await kuzu.Database();
+// Step 1: Initialize the Ladybug Database
+const db = await Ladybug.Database();
 
 // Step 2: Create a new connection to the database
-const conn = await kuzu.Connection(db);
+const conn = await Ladybug.Connection(db);
 
 // Step 3: Write data to the Emscripten virtual file system
-kuzu.FS.writeFile("/user.csv", "Adam,30\nKarissa,40\nZhang,50\nNoura,2");
+Ladybug.FS.writeFile("/user.csv", "Adam,30\nKarissa,40\nZhang,50\nNoura,2");
 
 // Step 4: Read the content of the file from the virtual file system to verify
-const fileContent = kuzu.FS.readFile("/user.csv", { encoding: 'utf8' });
+const fileContent = Ladybug.FS.readFile("/user.csv", { encoding: 'utf8' });
 console.log("File Content:\n", fileContent);
 
 // Step 5: Create a table for storing user data in the database

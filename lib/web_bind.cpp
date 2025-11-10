@@ -1,7 +1,7 @@
-#include "main/kuzu.h"
+#include "main/lbug.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
-using namespace kuzu::main;
+using namespace lbug::main;
 
 #include "include/web_database.h"
 #include "include/web_connection.h"

@@ -1,34 +1,34 @@
 
-> This project has been archived because it is no longer maintained. The latest official version can be found at <a href="https://docs.kuzudb.com/client-apis/wasm">Kùzu WASM Page</a> (Kùzu Team)
+> This project has been archived because it is no longer maintained. The latest official version can be found at <a href="https://docs.Ladybugdb.com/client-apis/wasm">Ladybug WASM Page</a> (Ladybug Team)
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/unswdb/kuzu-wasm/main/misc/new_logo.png" height="100">
-  <h1>Kùzu-Wasm</h1>
+  <img src="https://raw.githubusercontent.com/unswdb/Ladybug-wasm/main/misc/new_logo.png" height="100">
+  <h1>Ladybug-Wasm</h1>
 </div>
 
 <div align="center">
-  <a href="https://www.npmjs.com/package/@kuzu/kuzu-wasm/v/latest">
-    <img src="https://img.shields.io/npm/v/@kuzu/kuzu-wasm?logo=npm" alt="kuzu-wasm package on NPM">
+  <a href="https://www.npmjs.com/package/@Ladybug/Ladybug-wasm/v/latest">
+    <img src="https://img.shields.io/npm/v/@Ladybug/Ladybug-wasm?logo=npm" alt="Ladybug-wasm package on NPM">
   </a>
-  <!-- <a href="https://github.com/unswdb/kuzu-wasm/actions">
-    <img src="https://github.com/unswdb/kuzu-wasm/actions/workflows/shell.yml/badge.svg?branch=main" alt="Github Actions Badge">
+  <!-- <a href="https://github.com/unswdb/Ladybug-wasm/actions">
+    <img src="https://github.com/unswdb/Ladybug-wasm/actions/workflows/shell.yml/badge.svg?branch=main" alt="Github Actions Badge">
   </a> -->
-    <a href="https://github.com/unswdb/kuzu-wasm">
+    <a href="https://github.com/unswdb/Ladybug-wasm">
     <img src="https://img.shields.io/badge/status-archived-inactive">
     </a>
-    <a href="https://hub.docker.com/r/dylanshang/kuzu-wasm">
-    <img src="https://img.shields.io/docker/image-size/dylanshang/kuzu-wasm?logo=Docker" alt="Docker Badge">
+    <a href="https://hub.docker.com/r/dylanshang/Ladybug-wasm">
+    <img src="https://img.shields.io/docker/image-size/dylanshang/Ladybug-wasm?logo=Docker" alt="Docker Badge">
   </a>
 
 </div>
 <h1></h1>
 
-[Kùzu](https://github.com/kuzudb/kuzu) is an embedded graph database built for query speed and scalability.
+[Ladybug](https://github.com/LadybugDB/ladybug) is an embedded graph database built for query speed and scalability.
 
-Kùzu-Wasm brings kuzu to every browser thanks to WebAssembly.
+Ladybug-Wasm brings Ladybug to every browser thanks to WebAssembly.
 
 
-Try it out at [kuzu-shell.netlify.app](https://kuzu-shell.netlify.app).
+Try it out at [Ladybug-shell.netlify.app](https://Ladybug-shell.netlify.app).
 
 
 ## Installation
@@ -36,12 +36,12 @@ Prerequisite: [Enable Cross-Origin-isolation](https://web.dev/articles/cross-ori
 ### CDN
 ```javascript
 <script type="module">
-import kuzu_wasm from 'https://unpkg.com/@kuzu/kuzu-wasm@latest/dist/kuzu-browser.js';
+import Ladybug_wasm from 'https://unpkg.com/@Ladybug/Ladybug-wasm@latest/dist/Ladybug-browser.js';
 (async () => {
-    const kuzu = await kuzu_wasm();
-    window.kuzu = kuzu
-    const db = await kuzu.Database()
-    const conn = await kuzu.Connection(db)
+    const Ladybug = await Ladybug_wasm();
+    window.Ladybug = Ladybug
+    const db = await Ladybug.Database()
+    const conn = await Ladybug.Connection(db)
     await conn.execute(`CREATE NODE TABLE User(name STRING, age INT64, PRIMARY KEY (name))`)
     await conn.execute(`CREATE (u:User {name: 'Alice', age: 35});`)
     const res = await conn.execute(`MATCH (a:User) RETURN a.*;`)
@@ -51,14 +51,14 @@ import kuzu_wasm from 'https://unpkg.com/@kuzu/kuzu-wasm@latest/dist/kuzu-browse
 ```
 ### Webpack/React/Vue
 ```bash
-npm install @kuzu/kuzu-wasm
+npm install @Ladybug/Ladybug-wasm
 ```
 ```javascript
-import kuzu_wasm from '@kuzu/kuzu-wasm';
+import Ladybug_wasm from '@Ladybug/Ladybug-wasm';
 (async () => {
-    const kuzu = await kuzu_wasm();
-    const db = await kuzu.Database()
-    const conn = await kuzu.Connection(db)
+    const Ladybug = await Ladybug_wasm();
+    const db = await Ladybug.Database()
+    const conn = await Ladybug.Connection(db)
     await conn.execute(`CREATE NODE TABLE User(name STRING, age INT64, PRIMARY KEY (name))`)
     await conn.execute(`CREATE (u:User {name: 'Alice', age: 35});`)
     const res = await conn.execute(`MATCH (a:User) RETURN a.*;`)
@@ -68,7 +68,7 @@ import kuzu_wasm from '@kuzu/kuzu-wasm';
 
 ## Build from source
 ```shell
-git clone https://github.com/unswdb/kuzu-wasm.git --recursive
+git clone https://github.com/unswdb/Ladybug-wasm.git --recursive
 make package
 ```
 
@@ -76,9 +76,9 @@ make package
 
 | Subproject                                               | Description    | Language   |
 | -------------------------------------------------------- | :------------- | :--------- |
-| [kuzu_wasm](/lib)                                      | Wasm Library   | C++        |
-| [@kuzu/kuzu-wasm](/packages/kuzu-wasm)             | Javascript API | Javascript |
-| [@kuzu/kuzu-shell](/packages/kuzu-shell) | Cypher Shell      | React       |
+| [Ladybug_wasm](/lib)                                      | Wasm Library   | C++        |
+| [@Ladybug/Ladybug-wasm](/packages/Ladybug-wasm)             | Javascript API | Javascript |
+| [@Ladybug/Ladybug-shell](/packages/Ladybug-shell) | Cypher Shell      | React       |
 
 ## License
-By contributing to kuzu-wasm, you agree that your contributions will be licensed under the [MIT License](LICENSE.txt).
+By contributing to Ladybug-wasm, you agree that your contributions will be licensed under the [MIT License](LICENSE.txt).

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "main/kuzu.h"
+#include "main/lbug.h"
 #include "main/prepared_statement.h"
 
-using namespace kuzu::main;
+using namespace lbug::main;
 
 class WebPreparedStatement {
     friend class WebConnection;

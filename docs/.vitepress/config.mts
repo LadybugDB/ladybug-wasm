@@ -2,14 +2,14 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Kùzu Wasm",
-  base: '/kuzu-wasm/',
-  description: "WebAssembly version of Kùzu database",
+  title: "Ladybug Wasm",
+  base: '/lbug-wasm/',
+  description: "WebAssembly version of Ladybug database",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/guide/what-is-kuzu-wasm', activeMatch: '/guide/' },
+      { text: 'Guide', link: '/guide/what-is-lbug-wasm', activeMatch: '/guide/' },
     ],
 
     sidebar: {
@@ -21,7 +21,7 @@ export default defineConfig({
               text: 'Introduction',
               collapsed: false,
               items: [
-                { text: 'What is Kuzu Wasm?', link: 'what-is-kuzu-wasm' },
+                { text: 'What is Ladybug Wasm?', link: 'what-is-lbug-wasm' },
                 { text: 'Prerequisite', link: 'prerequisite' },
                 { text: 'Getting Started', link: 'getting-started' },
               ]
@@ -45,7 +45,7 @@ export default defineConfig({
       copyright: 'Copyright © 2024-present Dylan Shang'
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/unswdb/kuzu-wasm' }
+      { icon: 'github', link: 'https://github.com/unswdb/lbug-wasm' }
     ]
   }
 })

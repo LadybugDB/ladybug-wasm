@@ -7,12 +7,12 @@ Please make sure you have enable [Cross-Origin-Isolation](prerequisite) first.
 ### CDN
 ```javascript
 <script type="module">
-import kuzu_wasm from 'https://unpkg.com/@kuzu/kuzu-wasm@latest/dist/kuzu-browser.js';
+import Ladybug_wasm from 'https://unpkg.com/@Ladybug/Ladybug-wasm@latest/dist/Ladybug-browser.js';
 (async () => {
-    const kuzu = await kuzu_wasm();
-    window.kuzu = kuzu
-    const db = await kuzu.Database()
-    const conn = await kuzu.Connection(db)
+    const Ladybug = await Ladybug_wasm();
+    window.Ladybug = Ladybug
+    const db = await Ladybug.Database()
+    const conn = await Ladybug.Connection(db)
     await conn.execute(`CREATE NODE TABLE User(name STRING, age INT64, PRIMARY KEY (name))`)
     await conn.execute(`CREATE (u:User {name: 'Alice', age: 35});`)
     const res = await conn.execute(`MATCH (a:User) RETURN a.*;`)
@@ -26,33 +26,33 @@ import kuzu_wasm from 'https://unpkg.com/@kuzu/kuzu-wasm@latest/dist/kuzu-browse
 ::: code-group
 
 ```sh [npm]
-$ npm add @kuzu/kuzu-wasm
+$ npm add @Ladybug/Ladybug-wasm
 ```
 
 ```sh [pnpm]
-$ pnpm add @kuzu/kuzu-wasm
+$ pnpm add @Ladybug/Ladybug-wasm
 ```
 
 ```sh [yarn]
-$ yarn add @kuzu/kuzu-wasm
+$ yarn add @Ladybug/Ladybug-wasm
 ```
 
 ```sh [yarn (pnp)]
-$ yarn add @kuzu/kuzu-wasm
+$ yarn add @Ladybug/Ladybug-wasm
 ```
 
 ```sh [bun]
-$ bun add @kuzu/kuzu-wasm
+$ bun add @Ladybug/Ladybug-wasm
 ```
 
 :::
 
 ```javascript
-import kuzu_wasm from '@kuzu/kuzu-wasm';
+import Ladybug_wasm from '@Ladybug/Ladybug-wasm';
 (async () => {
-    const kuzu = await kuzu_wasm();
-    const db = await kuzu.Database()
-    const conn = await kuzu.Connection(db)
+    const Ladybug = await Ladybug_wasm();
+    const db = await Ladybug.Database()
+    const conn = await Ladybug.Connection(db)
     await conn.execute(`CREATE NODE TABLE User(name STRING, age INT64, PRIMARY KEY (name))`)
     await conn.execute(`CREATE (u:User {name: 'Alice', age: 35});`)
     const res = await conn.execute(`MATCH (a:User) RETURN a.*;`)

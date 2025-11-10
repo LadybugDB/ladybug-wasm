@@ -1,24 +1,24 @@
 {
-  "name": "@kuzu/kuzu-wasm",
+  "name": "@lbug/lbug-wasm",
   "version": "0.7.0",
   "author": "DylanShang",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/unswdb/kuzu-wasm"
+    "url": "https://github.com/unswdb/lbug-wasm"
   },
-  "description": "Kuzu GraphDB powered by WebAssembly",
-  "main": "dist/kuzu-wasm.js",
-  "module": "dist/kuzu-browser.js",
-  "unpkg": "dist/kuzu-wasm.js",
-  "jsdelivr": "dist/kuzu-wasm.js",
+  "description": "Ladybug GraphDB powered by WebAssembly",
+  "main": "dist/lbug-wasm.js",
+  "module": "dist/lbug-browser.js",
+  "unpkg": "dist/lbug-wasm.js",
+  "jsdelivr": "dist/lbug-wasm.js",
   "scripts": {
     "debug": "node bundle.mjs debug",
     "release": "node bundle.mjs release"
   },
   "keywords": [
     "cypher",
-    "kuzu",
+    "lbug",
     "graph",
     "database",
     "data",

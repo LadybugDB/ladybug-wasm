@@ -1,7 +1,7 @@
 # Prerequisite: Enable Cross-Origin-isolation
 
 ## Reason
-Since Kùzu does not currently have a fully single-threaded version, the process of compiling Kùzu into Kùzu-wasm using Emscripten requires the use of Pthreads. To support Pthreads, SharedArrayBuffer must be enabled. This means we need to configure the Cross-Origin Opener Policy (COOP) and Cross-Origin Embedder Policy (COEP) headers.
+Since Ladybug does not currently have a fully single-threaded version, the process of compiling Ladybug into Ladybug-wasm using Emscripten requires the use of Pthreads. To support Pthreads, SharedArrayBuffer must be enabled. This means we need to configure the Cross-Origin Opener Policy (COOP) and Cross-Origin Embedder Policy (COEP) headers.
 
 ## Explaination
 Emscripten has support for multithreading using SharedArrayBuffer in browsers. That API allows sharing memory between the main thread and web workers as well as atomic operations for synchronization, which enables Emscripten to implement support for the Pthreads (POSIX threads) API. This support is considered stable in Emscripten.

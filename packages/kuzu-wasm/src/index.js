@@ -1,9 +1,9 @@
 import {parseData, parseField, parseRecordBatch, parseSchema, parseTable, parseVector} from './arrow-js-ffi.es.mjs'
 import {tableToIPC} from 'apache-arrow'
-import * as kuzu from '../dist/kuzu-wasm.esm.js';
+import * as lbug from '../dist/lbug-wasm.esm.js';
 
-var kuzu_wasm = async function initializeKuzu() {
-    let module = await kuzu.default();
+var lbug_wasm = async function initializeLadybug() {
+    let module = await lbug.default();
     module.Database = (...args) => initializeWebDatabase(module, ...args);
     module.Connection = (...args) => initializeWebConnection(module, ...args);
     return module;
@@ -51,4 +51,4 @@ async function execute(module,webConnectionModule,query_text) {
     return false;
 }
 
-export default kuzu_wasm;
+export default lbug_wasm;

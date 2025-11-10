@@ -1,11 +1,11 @@
 {
-    "name": "@kuzu/benchmarks",
+    "name": "@lbug/benchmarks",
     "version": "1.0.0",
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "@kuzu/kuzu-wasm": "file:../kuzu-wasm",
-        "kuzu": "^0.4.2",
+        "@lbug/lbug-wasm": "file:../lbug-wasm",
+        "lbug": "^0.4.2",
         "neo4j-driver": "^5.22.0"
     },
     "scripts": {

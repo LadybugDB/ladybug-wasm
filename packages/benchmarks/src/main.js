@@ -1,5 +1,5 @@
-const kuzu_node = require("./kuzu_node");
-const { conn_wasm_promise } = require("./kuzu_wasm");
+const lbug_node = require("./lbug_node");
+const { conn_wasm_promise } = require("./lbug_wasm");
 const Benchmark = require('./system/benchmark');
 const { benchmarkQueries,benchmarkQueries_neo4j } = require('../ldbc-sf01/get_query');
 const generateBenchmarkReport = require('./system/generateBenchmarkReport'); // Import the report function
@@ -15,7 +15,7 @@ const systeminfo = require('./system/info');
 
     try {
         console.log("Awaiting connections...");
-        conn_node = await kuzu_node.conn_node_promise;
+        conn_node = await lbug_node.conn_node_promise;
         conn_wasm = await conn_wasm_promise;
         console.log("Connections established.");
     } catch (error) {
@@ -35,11 +35,11 @@ const systeminfo = require('./system/info');
         });
 
         console.log("Running benchmark for query: " + query.name+ ", " + query.query);
-        bench.add("kuzu-wasm", async function () {
-            // console.log("Running kuzu-wasm");
+        bench.add("lbug-wasm", async function () {
+            // console.log("Running lbug-wasm");
             await conn_wasm.query(query.query);
-        }).add("kuzu-node", async function () {
-            // console.log("Running kuzu-node");
+        }).add("lbug-node", async function () {
+            // console.log("Running lbug-node");
             await conn_node.query(query.query);
         });
         // .add("Neo4j", async function () {
@@ -56,5 +56,5 @@ const systeminfo = require('./system/info');
     generateBenchmarkReport(benchmarks);
 
     // Clean up database
-    kuzu_node.afterAll();
+    lbug_node.afterAll();
 })();

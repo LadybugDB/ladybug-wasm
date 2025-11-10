@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import 'xterm/css/xterm.css';
-import kuzu_wasm from '@kuzu/kuzu-wasm';
+import lbug_wasm from '@lbug/lbug-wasm';
 
 
 
@@ -21,7 +21,7 @@ const Shell = () => {
         var fileData = new Uint8Array(e.target.result); // transfer to Uint8Array
         var fileName = file.name; // get path from user
         var filePath = 'data/' + fileName;
-        kuzu.FS.writeFile(filePath, fileData);
+        lbug.FS.writeFile(filePath, fileData);
         console.log('File uploaded successfully!');
       };
       reader.readAsArrayBuffer(file);
@@ -29,48 +29,48 @@ const Shell = () => {
   }
 
   const keywordList = ["CALL", "CREATE", "DELETE", "DETACH", "EXISTS", "FOREACH", "LOAD", "MATCH", "MERGE", "OPTIONAL", "REMOVE", "RETURN", "SET", "START", "UNION", "UNWIND", "WITH", "LIMIT", "ORDER", "SKIP", "WHERE", "YIELD", "ASC", "ASCENDING", "ASSERT", "BY", "CSV", "DESC", "DESCENDING", "ON", "ALL", "CASE", "ELSE", "END", "THEN", "WHEN", "AND", "AS", "REL", "TABLE", "CONTAINS", "DISTINCT", "ENDS", "IN", "IS", "NOT", "OR", "STARTS", "XOR", "CONSTRAINT", "DROP", "EXISTS", "INDEX", "NODE", "KEY", "UNIQUE", "INDEX", "JOIN", "PERIODIC", "COMMIT", "SCAN", "USING", "FALSE", "NULL", "TRUE", "ADD", "DO", "FOR", "MANDATORY", "OF", "REQUIRE", "SCALAR", "EXPLAIN", "PROFILE", "HEADERS", "FROM", "FIELDTERMINATOR", "STAR", "MINUS", "COUNT", "PRIMARY", "COPY", "RDFGRAPH", "ALTER", "RENAME", "COMMENT", "MACRO", "GLOB", "COLUMN", "GROUP", "DEFAULT", "TO", "BEGIN", "TRANSACTION", "READ", "ONLY", "WRITE", "COMMIT_SKIP_CHECKPOINT", "ROLLBACK", "ROLLBACK_SKIP_CHECKPOINT", "INSTALL", "EXTENSION", "SHORTEST", "ATTACH", "IMPORT", "EXPORT", "USE"]
-  const startHint = (kuzuTerm,dbVersion,storageVersion) => {
-    kuzuTerm.writeln('Welcome to the Kuzu Shell!');
-    kuzuTerm.writeln('Database: v'+dbVersion);
-    kuzuTerm.writeln('Storage : v'+storageVersion);
-    kuzuTerm.writeln('Package : @kuzu/kuzu-wasm');
-    kuzuTerm.writeln('\n\rConnected to a local transient in-memory database.');
-    kuzuTerm.writeln('Enter help for usage hints.\n\r');
+  const startHint = (lbugTerm,dbVersion,storageVersion) => {
+    lbugTerm.writeln('Welcome to the Ladybug Shell!');
+    lbugTerm.writeln('Database: v'+dbVersion);
+    lbugTerm.writeln('Storage : v'+storageVersion);
+    lbugTerm.writeln('Package : @lbug/lbug-wasm');
+    lbugTerm.writeln('\n\rConnected to a local transient in-memory database.');
+    lbugTerm.writeln('Enter help for usage hints.\n\r');
   }
 
-  const helpHint = (kuzuTerm) => {
-    // kuzuTerm.write("\n\n\r")
-    kuzuTerm.writeln('');
-    kuzuTerm.writeln('');
-    kuzuTerm.writeln('\x1b[1;33mCommands:\x1b[0m');
-    kuzuTerm.writeln('clear                 Clear the shell.');
-    kuzuTerm.writeln('ls                    List files in the data directory.');
-    kuzuTerm.writeln('upload                Upload a file to the data directory.');
-    kuzuTerm.writeln('examples              Example queries.');
-    kuzuTerm.writeln('');
-    kuzuTerm.writeln('Repositories:');
-    kuzuTerm.writeln('\thttps://github.com/unswdb/kuzu-wasm');
+  const helpHint = (lbugTerm) => {
+    // lbugTerm.write("\n\n\r")
+    lbugTerm.writeln('');
+    lbugTerm.writeln('');
+    lbugTerm.writeln('\x1b[1;33mCommands:\x1b[0m');
+    lbugTerm.writeln('clear                 Clear the shell.');
+    lbugTerm.writeln('ls                    List files in the data directory.');
+    lbugTerm.writeln('upload                Upload a file to the data directory.');
+    lbugTerm.writeln('examples              Example queries.');
+    lbugTerm.writeln('');
+    lbugTerm.writeln('Repositories:');
+    lbugTerm.writeln('\thttps://github.com/unswdb/lbug-wasm');
   }
 
-  const examplesHint = (kuzuTerm) => {
+  const examplesHint = (lbugTerm) => {
 
-    kuzuTerm.write("\n\n\r")
-    kuzuTerm.writeln('\x1b[1;33mExample queries:\x1b[0m');
-    kuzuTerm.write("\n\r")
-    kuzuTerm.writeln('# Create schema');
-    kuzuTerm.writeln('CREATE NODE TABLE User(name STRING, age INT64, PRIMARY KEY (name))');
-    kuzuTerm.writeln('CREATE NODE TABLE City(name STRING, population INT64, PRIMARY KEY (name))');
-    kuzuTerm.writeln('CREATE REL TABLE Follows(FROM User TO User, since INT64)');
-    kuzuTerm.writeln('CREATE REL TABLE LivesIn(FROM User TO City)');
-    kuzuTerm.writeln('');
-    kuzuTerm.writeln('#Insert data');
-    kuzuTerm.writeln('COPY User FROM "/demo-db/csv/user.csv"');
-    kuzuTerm.writeln('COPY City FROM "/demo-db/csv/city.csv"');
-    kuzuTerm.writeln('COPY Follows FROM "/demo-db/csv/follows.csv"');
-    kuzuTerm.writeln('COPY LivesIn FROM "/demo-db/csv/lives-in.csv"');
-    kuzuTerm.writeln('');
-    kuzuTerm.writeln('#Cypher query');
-    kuzuTerm.writeln('MATCH (a:User)-[f:Follows]->(b:User)RETURN a.name, b.name, f.since');
+    lbugTerm.write("\n\n\r")
+    lbugTerm.writeln('\x1b[1;33mExample queries:\x1b[0m');
+    lbugTerm.write("\n\r")
+    lbugTerm.writeln('# Create schema');
+    lbugTerm.writeln('CREATE NODE TABLE User(name STRING, age INT64, PRIMARY KEY (name))');
+    lbugTerm.writeln('CREATE NODE TABLE City(name STRING, population INT64, PRIMARY KEY (name))');
+    lbugTerm.writeln('CREATE REL TABLE Follows(FROM User TO User, since INT64)');
+    lbugTerm.writeln('CREATE REL TABLE LivesIn(FROM User TO City)');
+    lbugTerm.writeln('');
+    lbugTerm.writeln('#Insert data');
+    lbugTerm.writeln('COPY User FROM "/demo-db/csv/user.csv"');
+    lbugTerm.writeln('COPY City FROM "/demo-db/csv/city.csv"');
+    lbugTerm.writeln('COPY Follows FROM "/demo-db/csv/follows.csv"');
+    lbugTerm.writeln('COPY LivesIn FROM "/demo-db/csv/lives-in.csv"');
+    lbugTerm.writeln('');
+    lbugTerm.writeln('#Cypher query');
+    lbugTerm.writeln('MATCH (a:User)-[f:Follows]->(b:User)RETURN a.name, b.name, f.since');
   }
 
   const formatString = (inputString) => {
@@ -85,45 +85,45 @@ const Shell = () => {
 
   useEffect(() => {
     if (terminalRef.current && !term) {
-      const kuzuTerm = new Terminal({
+      const lbugTerm = new Terminal({
         cursorBlink: true,
         cursorStyle: 'block',
         fontSize: 14,
         fontFamily: 'monospace',
         theme: { background: '#333' },
       });
-      const PROMPT = "kuzu# ";
-      kuzuTerm.prompt = () => {
-        kuzuTerm.write("\r\n" + PROMPT);
+      const PROMPT = "lbug# ";
+      lbugTerm.prompt = () => {
+        lbugTerm.write("\r\n" + PROMPT);
       };
       const fitAddon = new FitAddon();
-      kuzuTerm.loadAddon(fitAddon);
-      kuzuTerm.open(terminalRef.current);
+      lbugTerm.loadAddon(fitAddon);
+      lbugTerm.open(terminalRef.current);
       fitAddon.fit();
 
-      setTerm(kuzuTerm);
-      kuzuTerm.writeln('Starting kuzu...');
-      var kuzu = null;
+      setTerm(lbugTerm);
+      lbugTerm.writeln('Starting lbug...');
+      var lbug = null;
       let database = null;
       let connection = null;
       if (!UI_debug) {
-        kuzu_wasm().then((module) => {
-          kuzu = module;
-          window.kuzu = kuzu
-          kuzu.FS.mkdir("data")
+        lbug_wasm().then((module) => {
+          lbug = module;
+          window.lbug = lbug
+          lbug.FS.mkdir("data")
           database = new module.WebDatabase("test", 0, 1, false, false, 4194304 * 16 * 4)
           connection = new module.WebConnection(database, 0)
-          kuzuTerm.clear();
-          const storageVersion = kuzu.WebDatabase.getStorageVersion();
-          const dbVersion = kuzu.WebDatabase.getVersion();
-          startHint(kuzuTerm,dbVersion,storageVersion);
-          kuzuTerm.prompt();
+          lbugTerm.clear();
+          const storageVersion = lbug.WebDatabase.getStorageVersion();
+          const dbVersion = lbug.WebDatabase.getVersion();
+          startHint(lbugTerm,dbVersion,storageVersion);
+          lbugTerm.prompt();
         })
-      } else { kuzuTerm.clear(); kuzuTerm.writeln('Welcome to the Kuzu Shell!'); }
+      } else { lbugTerm.clear(); lbugTerm.writeln('Welcome to the Ladybug Shell!'); }
 
-      const getCurrentLineContent = (cursorY = kuzuTerm.buffer.active.cursorY + kuzuTerm.buffer.active.viewportY) => {
+      const getCurrentLineContent = (cursorY = lbugTerm.buffer.active.cursorY + lbugTerm.buffer.active.viewportY) => {
         if (cursorY < 1) return PROMPT;
-        let command = kuzuTerm.buffer.active.getLine(cursorY).translateToString().trim();
+        let command = lbugTerm.buffer.active.getLine(cursorY).translateToString().trim();
         // console.log("cursorY",cursorY,"command","'"+command+"'")
         command = command.startsWith(PROMPT.trim())
           ? command.slice(PROMPT.length)
@@ -131,16 +131,16 @@ const Shell = () => {
         return command;
       };
 
-      kuzuTerm.attachCustomKeyEventHandler((arg) => {
+      lbugTerm.attachCustomKeyEventHandler((arg) => {
         if ((arg.ctrlKey || arg.metaKey) && arg.code === "KeyV" && arg.type === "keydown") {
           if (UI_debug) console.log(arg)
           navigator.clipboard.readText()
             .then(text => {
               text = formatString(text);
-              kuzuTerm.write(text.replace(/\r?\n/g, '\r\n'));
+              lbugTerm.write(text.replace(/\r?\n/g, '\r\n'));
             })
         } else if (arg.ctrlKey && arg.code === "KeyC" && arg.type === "keydown") {
-          kuzuTerm.prompt();
+          lbugTerm.prompt();
         }
         return true;
       });
@@ -157,59 +157,59 @@ const Shell = () => {
               let result = connection.query(cmd);
               let text = result.printExecutionResult().replace(/\r?\n/g, '\r\n')
               // console.log(`${result.toString()}`)
-              kuzuTerm.writeln(`\r\n${text}`);
+              lbugTerm.writeln(`\r\n${text}`);
             }
           });
           // var result = connection.query(currentLineContent);
           // let text = result.printExecutionResult().replace(/\r?\n/g, '\r\n')
           // console.log(`${result.toString()}`)
-          // kuzuTerm.writeln(`\r\n${text}`);
+          // lbugTerm.writeln(`\r\n${text}`);
         } catch (error) {
-          kuzuTerm.writeln(`\r\nError: ${error.message}`);
+          lbugTerm.writeln(`\r\nError: ${error.message}`);
         }
       }
-      kuzuTerm.onKey(({ key, domEvent }) => {
+      lbugTerm.onKey(({ key, domEvent }) => {
         const printable = !domEvent.altKey && !domEvent.altGraphKey && !domEvent.ctrlKey && !domEvent.metaKey;
         // console.log(domEvent.key)
         if (domEvent.key === 'Enter') {
-          const inputString = kuzuTerm.buffer.active.getLine(0)?.translateToString().trim();
+          const inputString = lbugTerm.buffer.active.getLine(0)?.translateToString().trim();
           //get current line
           const currentLineContent = getCurrentLineContent();
           if (currentLineContent == "ls") {
-            let file_list = window.kuzu.FS.readdir('data').filter(e => e !== '.' && e !== '..')
+            let file_list = window.lbug.FS.readdir('data').filter(e => e !== '.' && e !== '..')
             //print file list
-            if (file_list.length != 0) kuzuTerm.write('\r\n' + file_list.join(' '))
+            if (file_list.length != 0) lbugTerm.write('\r\n' + file_list.join(' '))
             // console.log(file_list)
           } else if (currentLineContent == "upload") {
             fileInputRef.current.click();
           }
           else if (currentLineContent == "clear") {
-            // kuzuTerm.writeln("\r\n")
-            kuzuTerm.clear();
+            // lbugTerm.writeln("\r\n")
+            lbugTerm.clear();
           }
           else if (currentLineContent == "help") {
-            helpHint(kuzuTerm);
+            helpHint(lbugTerm);
           }
           else if (currentLineContent == "examples") {
-            examplesHint(kuzuTerm);
+            examplesHint(lbugTerm);
           }
           else if (!UI_debug && inputString && connection) {
             executeCommand(currentLineContent)
           }
           else {
-            kuzuTerm.write('\r\nUI debug mode'); console.log(UI_debug, inputString, connection)
+            lbugTerm.write('\r\nUI debug mode'); console.log(UI_debug, inputString, connection)
           }
-          kuzuTerm.prompt();
+          lbugTerm.prompt();
         } else if (domEvent.key == 'Backspace') {
-          if (kuzuTerm.buffer.active.cursorX > PROMPT.length) {
-            kuzuTerm.write('\b \b');
+          if (lbugTerm.buffer.active.cursorX > PROMPT.length) {
+            lbugTerm.write('\b \b');
           }
         }else if (domEvent.key === "ArrowUp" ){;}
         else if (domEvent.key === "ArrowDown" ){;}
-        else if (domEvent.key === "ArrowLeft" || domEvent.key === "ArrowRight" ){kuzuTerm.write(key);}
+        else if (domEvent.key === "ArrowLeft" || domEvent.key === "ArrowRight" ){lbugTerm.write(key);}
         else if (printable) {
           //common chacater
-          kuzuTerm.write(key);
+          lbugTerm.write(key);
           // console.log("write", key)
           let cur_line = getCurrentLineContent();
           if (key.trim() == "") return;
@@ -219,18 +219,18 @@ const Shell = () => {
           // console.log(cur_line.split(" "))
           // repaint the last word
           for (let i = 0; i < word.length; i++) {
-            kuzuTerm.write('\b \b');
+            lbugTerm.write('\b \b');
           }
           if (keywordList.includes(word.toUpperCase())){
             // use green color to print
-            kuzuTerm.write('\x1b[1;36m')
+            lbugTerm.write('\x1b[1;36m')
             //add the keyword
-            kuzuTerm.write(word);
+            lbugTerm.write(word);
             //reset the color
-            kuzuTerm.write('\x1b[0m')
+            lbugTerm.write('\x1b[0m')
           }else{
-            kuzuTerm.write('\x1b[0m')
-            kuzuTerm.write(word);
+            lbugTerm.write('\x1b[0m')
+            lbugTerm.write(word);
             // console.log(word)
           }
 

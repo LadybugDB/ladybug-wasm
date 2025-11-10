@@ -1,8 +1,8 @@
 #pragma once
 
-#include "main/kuzu.h"
+#include "main/lbug.h"
 #include "main/storage_driver.h"
-using namespace kuzu::main;
+using namespace lbug::main;
 
 
 class WebDatabase {

@@ -1,5 +1,5 @@
 {
-  "name": "@kuzu/kuzu-shell",
+  "name": "@lbug/lbug-shell",
   "version": "0.1.0",
   "author": "Dylan Shang <github.com/DylanShang>",
   "private": true,
@@ -13,7 +13,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@kuzu/kuzu-wasm": "file:../kuzu-wasm",
+    "@lbug/lbug-wasm": "file:../lbug-wasm",
     "bootstrap": "^5.3.3",
     "classnames": "^2.5.1",
     "fontfaceobserver": "^2.3.0",

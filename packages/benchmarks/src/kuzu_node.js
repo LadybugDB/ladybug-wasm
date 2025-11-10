@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const kuzu = require("kuzu");
+const lbug = require("lbug");
 
 const { getImportQueries } = require('../ldbc-sf01/get_query');
 const csvPath = path.resolve(__dirname, '..', 'ldbc-sf01', 'csv');
@@ -14,13 +14,13 @@ fs.rmSync(databasePath, { recursive: true, force: true });
 console.log("CsvPath is located in:", csvPath);
 
 // Create an empty database and connect to it
-const db = new kuzu.Database(dbName);
-const version = kuzu.Database.getVersion()
-const conn = new kuzu.Connection(db);
+const db = new lbug.Database(dbName);
+const version = lbug.Database.getVersion()
+const conn = new lbug.Connection(db);
 
 async function setup() {
   for (const query of importQueries) {
-    console.log("kuzu-node:" + query);
+    console.log("lbug-node:" + query);
     await conn.query(query);
   }
   return conn;

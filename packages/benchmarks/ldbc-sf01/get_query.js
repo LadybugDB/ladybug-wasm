@@ -470,7 +470,7 @@ const benchmarkQueries_neo4j = [
 //   });
 //   return { name, query };
 // }
-// const queryPath = path.resolve(__dirname, '..', '..','..','kuzu','benchmark','queries','ldbc-sf100');
+// const queryPath = path.resolve(__dirname, '..', '..','..','lbug','benchmark','queries','ldbc-sf100');
 // // Get all .benchmark files
 // findBenchmarkFiles(queryPath); // Start from the current directory
 // // Parse and output results

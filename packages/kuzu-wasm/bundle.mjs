@@ -14,21 +14,21 @@ if (args.length == 0) {
     await esbuild.build({
         entryPoints: ['src/index.js'],
         bundle: true,
-        outfile: 'dist/kuzu-browser.js',
+        outfile: 'dist/lbug-browser.js',
         platform: 'browser',
         format: 'esm',
         sourcemap: true,
         minify: !is_debug,
         sourcemap: is_debug ? 'inline' : true,
         plugins: [],
-        external: ['../dist/kuzu-wasm.esm.js'],
+        external: ['../dist/lbug-wasm.esm.js'],
         // Replace the path to the same directory
         plugins: [
             {
-              name: 'replace-kuzu-path',
+              name: 'replace-lbug-path',
               setup(build) {
-                build.onResolve({ filter: /..\/dist\/kuzu-wasm\.esm\.js$/ }, args => {
-                  return { path: './kuzu-wasm.esm.js', external: true };
+                build.onResolve({ filter: /..\/dist\/lbug-wasm\.esm\.js$/ }, args => {
+                  return { path: './lbug-wasm.esm.js', external: true };
                 });
               }
             }

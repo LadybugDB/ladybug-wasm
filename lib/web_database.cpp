@@ -4,7 +4,7 @@
 
 #include "main/version.h"
 
-using namespace kuzu::common;
+using namespace lbug::common;
 
 std::string WebDatabase::getVersion() {
     return std::string(Version::getVersion());
@@ -19,7 +19,7 @@ WebDatabase::WebDatabase(const std::string& databasePath, uint64_t bufferPoolSiz
     auto systemConfig =
         SystemConfig(bufferPoolSize, maxNumThreads, compression, readOnly, maxDBSize);
     database = std::make_unique<Database>(databasePath, systemConfig);
-    storageDriver = std::make_unique<kuzu::main::StorageDriver>(database.get());
+    storageDriver = std::make_unique<lbug::main::StorageDriver>(database.get());
 }
 
 WebDatabase::~WebDatabase() {}

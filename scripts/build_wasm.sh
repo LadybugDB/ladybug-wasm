@@ -24,11 +24,11 @@ if $emscripten;then
         EMCC_CFLAGS="-Wno-c++11-narrowing"\
         -j${CORES} &&
     #rename the output file
-    mv build/${MODE}/kuzu-wasm.js build/${MODE}/kuzu-wasm.esm.js &&
-    sed -i.bak 's/kuzu-wasm\.js/kuzu-wasm\.esm\.js/g' build/${MODE}/kuzu-wasm.esm.js &&
+    mv build/${MODE}/lbug-wasm.js build/${MODE}/lbug-wasm.esm.js &&
+    sed -i.bak 's/lbug-wasm\.js/lbug-wasm\.esm\.js/g' build/${MODE}/lbug-wasm.esm.js &&
     # fix problem in https://github.com/emscripten-core/emscripten/issues/22654
-    sed -i.bak 's|worker=new Worker(new URL("kuzu-wasm\.esm\.js",import.meta\.url),workerOptions);PThread\.unusedWorkers\.push(worker)|try { var xhr = new XMLHttpRequest(); xhr.open("GET", new URL('\''kuzu-wasm.esm.js'\'', import.meta.url), false); xhr.send(null); if (xhr.status === 200) { const scriptText = xhr.responseText; const workerUrl = URL.createObjectURL(new Blob([scriptText], { type: '\''application/javascript'\'' })); PThread.unusedWorkers.push(new Worker(workerUrl, workerOptions)); } } catch (error) { console.error("Error allocating worker:", error); }|' build/${MODE}/kuzu-wasm.esm.js &&
-    rm "build/${MODE}/kuzu-wasm.esm.js.bak" &&
+    sed -i.bak 's|worker=new Worker(new URL("lbug-wasm\.esm\.js",import.meta\.url),workerOptions);PThread\.unusedWorkers\.push(worker)|try { var xhr = new XMLHttpRequest(); xhr.open("GET", new URL('\''lbug-wasm.esm.js'\'', import.meta.url), false); xhr.send(null); if (xhr.status === 200) { const scriptText = xhr.responseText; const workerUrl = URL.createObjectURL(new Blob([scriptText], { type: '\''application/javascript'\'' })); PThread.unusedWorkers.push(new Worker(workerUrl, workerOptions)); } } catch (error) { console.error("Error allocating worker:", error); }|' build/${MODE}/lbug-wasm.esm.js &&
+    rm "build/${MODE}/lbug-wasm.esm.js.bak" &&
     #build for node
     emcmake cmake \
         -B build/${MODE} \
@@ -39,7 +39,7 @@ if $emscripten;then
         -j${CORES}
 else
     #build for native
-	cd kuzu && \
+	cd lbug && \
     cmake -B build/release  -DCMAKE_BUILD_TYPE=Release  . \
 	cmake --build build/release --config Release
 fi

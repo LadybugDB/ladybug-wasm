@@ -4,13 +4,13 @@
 
 #include "main/connection.h"
 
-using namespace kuzu::common;
-using namespace kuzu;
+using namespace lbug::common;
+using namespace lbug;
 
 // Tod do: create_function(UDF)
 
 WebConnection::WebConnection(WebDatabase* WebDatabase, uint64_t numThreads) {
-    storageDriver = std::make_unique<kuzu::main::StorageDriver>(WebDatabase->database.get());
+    storageDriver = std::make_unique<lbug::main::StorageDriver>(WebDatabase->database.get());
     conn = std::make_unique<Connection>(WebDatabase->database.get());
     if (numThreads > 0) {
         conn->setMaxNumThreadForExec(numThreads);

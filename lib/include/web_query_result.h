@@ -3,10 +3,10 @@
 #include <memory>
 #include <vector>
 
-#include "main/kuzu.h"
+#include "main/lbug.h"
 #include <emscripten/val.h>
 
-using namespace kuzu::main;
+using namespace lbug::main;
 using namespace emscripten;
 
 class WebQueryResult {
@@ -24,7 +24,7 @@ public:
 
     ~WebQueryResult();
 
-    // static val convertValueToJsObject(const kuzu::common::Value& value);
+    // static val convertValueToJsObject(const lbug::common::Value& value);
 
     // std::string toSingleQueryString();
     bool hasNextQueryResult();

@@ -4,8 +4,8 @@ FROM emscripten/emsdk:latest
 # Set maintainer information
 LABEL maintainer="lantu.april@gmail.com"
 
-# Download kuzu-wasm
-RUN cd / && git clone https://github.com/unswdb/kuzu-wasm.git --recursive
+# Download lbug-wasm
+RUN cd / && git clone https://github.com/unswdb/lbug-wasm.git --recursive
 
 # Install the necessary packages
 RUN apt-get update && \
@@ -14,14 +14,14 @@ RUN apt-get update && \
 # Verify the installation of Emscripten, Node.js, and Yarn
 RUN emcc -v && node -v && yarn -v  # Check versions
 
-# Set the working directory to /kuzu-wasm
-WORKDIR /kuzu-wasm
+# Set the working directory to /lbug-wasm
+WORKDIR /lbug-wasm
 
-# Install kuzu-wasm and build package
+# Install lbug-wasm and build package
 RUN make package
 
 # Remove the unnecessary files
-RUN rm -rf /kuzu-wasm/kuzu/dataset
+RUN rm -rf /lbug-wasm/lbug/dataset
 
 # Set the default command to run when starting the container
 CMD ["/bin/bash"]
