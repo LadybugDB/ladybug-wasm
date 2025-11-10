@@ -1,3 +1,3 @@
 [submodule "kuzu"]
-	path = kuzu
-	url = https://github.com/kuzudb/kuzu.git
+	path = ladybug
+	url = https://github.com/LadybugDB/ladybug
