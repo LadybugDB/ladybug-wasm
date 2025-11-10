@@ -12,7 +12,7 @@ if (EMSCRIPTEN)
     add_link_options("SHELL:-s USE_PTHREADS")
 endif()
 
-add_subdirectory(lbug)
+add_subdirectory(ladybug)
 include_directories(lib)
 add_executable(lbug-wasm lib/web_bind.cpp lib/web_database.cpp lib/web_connection.cpp lib/web_prepared_statement.cpp lib/web_query_result.cpp)
 target_link_libraries(lbug-wasm lbug)
