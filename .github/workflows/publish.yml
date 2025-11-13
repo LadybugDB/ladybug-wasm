@@ -1,0 +1,58 @@
+name: Publish to NPM
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 0.12.0)'
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Set version
+      run: |
+        if [ "${{ github.event_name }}" == "release" ]; then
+          VERSION="${{ github.event.release.tag_name }}"
+          VERSION="${VERSION#v}"  # Remove 'v' prefix if present
+        elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          VERSION="0.12.0"  # Fallback
+        fi
+        sed -i 's/"version": "[^"]*"/"version": "'"$VERSION"'"/' packages/lbug-wasm/package.json
+        echo "Version set to $VERSION"
+
+    - name: Setup Emscripten
+      uses: mymindstorm/setup-emsdk@v14
+      with:
+        version: latest
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        registry-url: 'https://registry.npmjs.org/'
+
+    - name: Install Yarn
+      run: npm install -g yarn
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Build package
+      run: make package
+
+    - name: Publish to NPM
+      run: cd packages/lbug-wasm && npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_JS_TOKEN }}
