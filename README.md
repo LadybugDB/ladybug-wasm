@@ -1,19 +1,17 @@
 
-> This project has been archived because it is no longer maintained. The latest official version can be found at <a href="https://docs.Ladybugdb.com/client-apis/wasm">Ladybug WASM Page</a> (Ladybug Team)
-
 <div align="center">
   <img src="https://raw.githubusercontent.com/unswdb/Ladybug-wasm/main/misc/new_logo.png" height="100">
   <h1>Ladybug-Wasm</h1>
 </div>
 
 <div align="center">
-  <a href="https://www.npmjs.com/package/@Ladybug/Ladybug-wasm/v/latest">
-    <img src="https://img.shields.io/npm/v/@Ladybug/Ladybug-wasm?logo=npm" alt="Ladybug-wasm package on NPM">
+  <a href="https://www.npmjs.com/package/@lbug/Ladybug-wasm/v/latest">
+    <img src="https://img.shields.io/npm/v/@lbug/Ladybug-wasm?logo=npm" alt="Ladybug-wasm package on NPM">
   </a>
   <!-- <a href="https://github.com/unswdb/Ladybug-wasm/actions">
     <img src="https://github.com/unswdb/Ladybug-wasm/actions/workflows/shell.yml/badge.svg?branch=main" alt="Github Actions Badge">
   </a> -->
-    <a href="https://github.com/unswdb/Ladybug-wasm">
+    <a href="https://github.com/LadybugDB/Ladybug-wasm">
     <img src="https://img.shields.io/badge/status-archived-inactive">
     </a>
     <a href="https://hub.docker.com/r/dylanshang/Ladybug-wasm">
@@ -51,10 +49,10 @@ import Ladybug_wasm from 'https://unpkg.com/@Ladybug/Ladybug-wasm@latest/dist/La
 ```
 ### Webpack/React/Vue
 ```bash
-npm install @Ladybug/Ladybug-wasm
+npm install @lbug/Ladybug-wasm
 ```
 ```javascript
-import Ladybug_wasm from '@Ladybug/Ladybug-wasm';
+import Ladybug_wasm from '@lbug/Ladybug-wasm';
 (async () => {
     const Ladybug = await Ladybug_wasm();
     const db = await Ladybug.Database()
@@ -68,7 +66,7 @@ import Ladybug_wasm from '@Ladybug/Ladybug-wasm';
 
 ## Build from source
 ```shell
-git clone https://github.com/unswdb/Ladybug-wasm.git --recursive
+git clone https://github.com/LadybugDB/Ladybug-wasm.git --recursive
 make package
 ```
 
