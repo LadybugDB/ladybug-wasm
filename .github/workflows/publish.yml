@@ -48,9 +48,8 @@ jobs:
         node-version: '22'
         registry-url: 'https://registry.npmjs.org/'
 
-    - name: Update npm and Install Yarn
+    - name: Install Yarn
       run: |
-        npm install -g npm@latest
         npm install -g yarn
 
     - name: Install dependencies
@@ -104,4 +103,7 @@ jobs:
         registry-url: 'https://registry.npmjs.org/'
 
     - name: Publish to NPM
-      run: cd packages/lbug-wasm && npm publish --access public
+      # older versions of npm fail with trusted publishing
+      run: |
+        npm install -g npm@latest
+        cd packages/lbug-wasm && npm publish --access public
