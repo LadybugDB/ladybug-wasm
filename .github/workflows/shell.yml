@@ -26,10 +26,28 @@ jobs:
     - name: Setup Emscripten toolchain
       uses: mymindstorm/setup-emsdk@v14
 
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: shell-test
+        verbose: 2
+
+    - name: Cache build
+      uses: actions/cache@v4
+      with:
+        path: ladybug/build
+        key: shell-build-${{ hashFiles('ladybug/CMakeLists.txt', 'ladybug/src/**', 'ladybug/extension/**', 'ladybug/tools/**') }}
+
+    - name: Show initial ccache stats
+      run: ccache -s
+
     - run: npm install -g yarn
     - name: Build Shell Project
       run: |
         make shell
+
+    - name: Show ccache stats
+      run: ccache -s
 
     - name: Deploy to Netlify
       uses: nwtgck/actions-netlify@v3.0
