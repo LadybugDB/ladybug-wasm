@@ -58,14 +58,8 @@ jobs:
     - name: Setup ccache
       uses: hendrikmuhs/ccache-action@v1.2
       with:
-        key: shell-test
+        key: publish-build
         verbose: 2
-
-    - name: Cache build
-      uses: actions/cache@v4
-      with:
-        path: ladybug/build
-        key: shell-build-${{ hashFiles('ladybug/CMakeLists.txt', 'ladybug/src/**', 'ladybug/extension/**', 'ladybug/tools/**') }}
 
     - name: Show initial ccache stats
       run: ccache -s
