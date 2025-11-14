@@ -5,16 +5,13 @@
 </div>
 
 <div align="center">
-  <a href="https://www.npmjs.com/package/@lbug/Ladybug-wasm/v/latest">
-    <img src="https://img.shields.io/npm/v/@lbug/Ladybug-wasm?logo=npm" alt="Ladybug-wasm package on NPM">
+  <a href="https://www.npmjs.com/package/@lbug/lbug-wasm/v/latest">
+    <img src="https://img.shields.io/npm/v/@lbug/lbug-wasm?logo=npm" alt="Ladybug-wasm package on NPM">
   </a>
-  <!-- <a href="https://github.com/unswdb/Ladybug-wasm/actions">
-    <img src="https://github.com/unswdb/Ladybug-wasm/actions/workflows/shell.yml/badge.svg?branch=main" alt="Github Actions Badge">
-  </a> -->
-    <a href="https://github.com/LadybugDB/Ladybug-wasm">
-    <img src="https://img.shields.io/badge/status-archived-inactive">
-    </a>
-    <a href="https://hub.docker.com/r/dylanshang/Ladybug-wasm">
+  <a href="https://github.com/LadybugDB/ladybug-wasm/actions">
+    <img src="https://github.com/LadybugDB/ladybug-wasm/actions/workflows/shell.yml/badge.svg?branch=main" alt="Github Actions Badge">
+  </a> 
+    <a href="https://hub.docker.com/r/dylanshang/ladybug-wasm">
     <img src="https://img.shields.io/docker/image-size/dylanshang/Ladybug-wasm?logo=Docker" alt="Docker Badge">
   </a>
 
