@@ -14,14 +14,14 @@ RUN apt-get update && \
 # Verify the installation of Emscripten, Node.js, and Yarn
 RUN emcc -v && node -v && yarn -v  # Check versions
 
-# Set the working directory to /lbug-wasm
-WORKDIR /lbug-wasm
+# Set the working directory to /ladybug-wasm
+WORKDIR /ladybug-wasm
 
 # Install lbug-wasm and build package
 RUN make package
 
 # Remove the unnecessary files
-RUN rm -rf /lbug-wasm/lbug/dataset
+RUN rm -rf /ladybug-wasm/ladybug/dataset
 
 # Set the default command to run when starting the container
 CMD ["/bin/bash"]
