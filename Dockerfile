@@ -5,7 +5,7 @@ FROM emscripten/emsdk:latest
 LABEL maintainer="lantu.april@gmail.com"
 
 # Download lbug-wasm
-RUN cd / && git clone https://github.com/unswdb/lbug-wasm.git --recursive
+RUN cd / && git clone https://github.com/LadybugDB/ladybug-wasm.git --recursive
 
 # Install the necessary packages
 RUN apt-get update && \
