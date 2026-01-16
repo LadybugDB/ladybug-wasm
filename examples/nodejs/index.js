@@ -10,8 +10,9 @@ const initDatabase = async () => {
   db = new lbug.Database(":memory:", 1 << 30 /* 1GB */);
   conn = new lbug.Connection(db, 4);
 
+  const demoDbDir = "../../../../dataset/demo-db/csv/";
   // Load the schema from local dataset file
-  const schema = (await fs.readFile("../../../../dataset/demo-db/csv/schema.cypher"))
+  const schema = (await fs.readFile(demoDbDir + "schema.cypher"))
     .toString()
     .split("\n");
   for (const line of schema) {
@@ -25,15 +26,21 @@ const initDatabase = async () => {
   }
 
   // Load the data from local dataset file
-  const copy = (await fs.readFile("../../../../dataset/demo-db/csv/copy.cypher"))
+  const copy = (await fs.readFile(demoDbDir + "copy.cypher"))
     .toString()
     .split("\n");
 
+  const dataFileExtension = ["csv", "parquet", "npy", "ttl", "nq", "json", "lbug_extension"];
+  const dataFileRegex = new RegExp(`"([^"]+\\.(${dataFileExtension.join('|')}))"`, "gi");
+
   for (const line of copy) {
-    if (line.trim().length === 0) {
-      continue;
+    if (!line || line.trim().length === 0) {
+        continue;
     }
-    const statement = line.replace("dataset/demo-db/csv", "../../../../dataset/demo-db/csv");
+
+    // handle multiple data files in one line
+    const statement = line.replace(dataFileRegex, `"${demoDbDir}$1"`);
+
     console.log("Executing: ", statement);
     const queryResult = await conn.query(statement);
     console.log((await queryResult.toString()));

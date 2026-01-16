@@ -24,8 +24,8 @@ const initTests = async () => {
   await lbug.init();
   const db = new lbug.Database(dbPath, 1 << 30 /* 1GB */);
   const conn = new lbug.Connection(db, 4);
-
-  const schema = (await fs.readFile("../../dataset/tinysnb/schema.cypher"))
+  const tinysnbDir = "../../dataset/tinysnb/";
+  const schema = (await fs.readFile(tinysnbDir + "schema.cypher"))
     .toString()
     .split("\n");
   for (const line of schema) {
@@ -35,15 +35,20 @@ const initTests = async () => {
     await conn.query(line);
   }
 
-  const copy = (await fs.readFile("../../dataset/tinysnb/copy.cypher"))
+  const copy = (await fs.readFile(tinysnbDir + "copy.cypher"))
     .toString()
     .split("\n");
 
+  const dataFileExtension = ["csv", "parquet", "npy", "ttl", "nq", "json", "lbug_extension"];
+  const dataFileRegex = new RegExp(`"([^"]+\\.(${dataFileExtension.join('|')}))"`, "gi");
+
   for (const line of copy) {
-    if (line.trim().length === 0) {
-      continue;
+    if (!line || line.trim().length === 0) {
+        continue;
     }
-    const statement = line.replace("dataset/tinysnb", "../../dataset/tinysnb");
+
+    // handle multiple data files in one line
+    const statement = line.replace(dataFileRegex, `"${tinysnbDir}$1"`);
     await conn.query(statement);
   }
 
