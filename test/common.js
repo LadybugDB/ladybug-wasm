@@ -25,6 +25,7 @@ const initTests = async () => {
   const db = new lbug.Database(dbPath, 1 << 30 /* 1GB */);
   const conn = new lbug.Connection(db, 4);
   const tinysnbDir = "../../dataset/tinysnb/";
+
   const schema = (await fs.readFile(tinysnbDir + "schema.cypher"))
     .toString()
     .split("\n");
