@@ -191,7 +191,11 @@ export declare class Connection {
 
 /** Emscripten virtual filesystem utilities (browser variants only). */
 export declare class FS {
-  static writeFile(path: string, data: string | ArrayBuffer, options?: object): void;
+  static writeFile(
+    path: string,
+    data: string | ArrayBuffer,
+    options?: object,
+  ): void;
   static readFile(path: string, options?: { encoding: "binary" }): Uint8Array;
   static readFile(path: string, options: { encoding: "utf8" }): string;
   static unlink(path: string): void;
