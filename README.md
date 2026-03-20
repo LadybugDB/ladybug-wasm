@@ -11,7 +11,7 @@ Please visit [Ladybug website](https://ladybugdb.com) for more information. Lady
 ## Installation
 
 ```bash
-npm i lbug-wasm
+npm i @ladybugdb/wasm-core
 ```
 
 ## Example usage
