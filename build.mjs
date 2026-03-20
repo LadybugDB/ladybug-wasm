@@ -1,82 +1,115 @@
-import * as esbuild from 'esbuild'
+import * as esbuild from "esbuild";
 import { execSync } from "child_process";
-import path from 'path';
-import os from 'os';
-import fs from 'fs';
+import path from "path";
+import os from "os";
+import fs from "fs";
 
 const SRC_PATH = path.resolve("..", "..");
 const THREADS = os.cpus().length;
 const LBUG_VERSION_TEXT = "Lbug VERSION";
 const ES_BUILD_CONFIG = {
-  entryPoints: ['./build/sync/index.js', './build/index.js', 'build/lbug_wasm_worker.js'],
+  entryPoints: [
+    "./build/sync/index.js",
+    "./build/index.js",
+    "build/lbug_wasm_worker.js",
+  ],
   bundle: true,
-  format: 'esm',
-  external: ['fs', 'path', 'ws', 'crypto', "worker_threads", "os", "util", "node:fs", "node:path", "node:crypto", "node:os", "node:util", "node:ws", "node:worker_threads"],
-  outdir: 'package',
-  logLevel: 'info',
+  format: "esm",
+  external: [
+    "fs",
+    "path",
+    "ws",
+    "crypto",
+    "worker_threads",
+    "os",
+    "util",
+    "node:fs",
+    "node:path",
+    "node:crypto",
+    "node:os",
+    "node:util",
+    "node:ws",
+    "node:worker_threads",
+  ],
+  outdir: "package",
+  logLevel: "info",
   define: {
-    "importMeta": "import.meta"
-  }
+    importMeta: "import.meta",
+  },
 };
 
 console.log(`Using ${THREADS} threads to build Lbug.`);
-console.log('Cleaning up...');
+console.log("Cleaning up...");
 execSync("npm run clean", { stdio: "inherit" });
-console.log('Building single-threaded version of Lbug WebAssembly module...')
+console.log("Building single-threaded version of Lbug WebAssembly module...");
 execSync(`make wasm NUM_THREADS=${THREADS} SINGLE_THREADED=true`, {
   cwd: SRC_PATH,
   stdio: "inherit",
 });
 
-console.log('Creating esbuild bundle...');
+console.log("Creating esbuild bundle...");
 await esbuild.build(ES_BUILD_CONFIG);
 
-console.log('Cleaning up...');
+console.log("Cleaning up...");
 execSync("npm run clean exclude-package", { stdio: "inherit" });
 console.log("Building multi-threaded version of Lbug WebAssembly module...");
 execSync(`make wasm NUM_THREADS=${THREADS} SINGLE_THREADED=false`, {
   cwd: SRC_PATH,
   stdio: "inherit",
 });
-console.log('Creating esbuild bundle...');
+console.log("Creating esbuild bundle...");
 const ES_BUILD_CONFIG_MULTI = JSON.parse(JSON.stringify(ES_BUILD_CONFIG));
-ES_BUILD_CONFIG_MULTI.outdir = 'package/multithreaded';
+ES_BUILD_CONFIG_MULTI.outdir = "package/multithreaded";
 await esbuild.build(ES_BUILD_CONFIG_MULTI);
 
-console.log('Cleaning up...');
+console.log("Cleaning up...");
 execSync("npm run clean exclude-package", { stdio: "inherit" });
 console.log("Building Node.js version of Lbug WebAssembly module...");
-execSync(`make wasm NUM_THREADS=${THREADS} SINGLE_THREADED=false WASM_NODEFS=true`, {
-  cwd: SRC_PATH,
-  stdio: "inherit",
-});
+execSync(
+  `make wasm NUM_THREADS=${THREADS} SINGLE_THREADED=false WASM_NODEFS=true`,
+  {
+    cwd: SRC_PATH,
+    stdio: "inherit",
+  },
+);
 
-console.log('Copying Node.js version to package...');
-const srcPath = path.resolve('.', 'build');
-const dstPath = path.resolve('.', 'package', 'nodejs');
+console.log("Copying Node.js version to package...");
+const srcPath = path.resolve(".", "build");
+const dstPath = path.resolve(".", "package", "nodejs");
 fs.cpSync(srcPath, dstPath, { recursive: true });
 
-console.log('Copying TypeScript declarations...');
-const JS_SRC = path.resolve('.', 'src_js');
-const ASYNC_DTS = path.join(JS_SRC, 'index.d.ts');
-const SYNC_DTS = path.join(JS_SRC, 'sync', 'index.d.ts');
-const PKG = path.resolve('.', 'package');
-for (const dest of [PKG, path.join(PKG, 'multithreaded'), path.join(PKG, 'nodejs')]) {
+console.log("Copying TypeScript declarations...");
+const JS_SRC = path.resolve(".", "src_js");
+const ASYNC_DTS = path.join(JS_SRC, "index.d.ts");
+const SYNC_DTS = path.join(JS_SRC, "sync", "index.d.ts");
+const PKG = path.resolve(".", "package");
+for (const dest of [
+  PKG,
+  path.join(PKG, "multithreaded"),
+  path.join(PKG, "nodejs"),
+]) {
   fs.mkdirSync(dest, { recursive: true });
-  fs.copyFileSync(ASYNC_DTS, path.join(dest, 'index.d.ts'));
+  fs.copyFileSync(ASYNC_DTS, path.join(dest, "index.d.ts"));
 }
-for (const dest of [path.join(PKG, 'sync'), path.join(PKG, 'multithreaded', 'sync'), path.join(PKG, 'nodejs', 'sync')]) {
+for (const dest of [
+  path.join(PKG, "sync"),
+  path.join(PKG, "multithreaded", "sync"),
+  path.join(PKG, "nodejs", "sync"),
+]) {
   fs.mkdirSync(dest, { recursive: true });
-  fs.copyFileSync(SYNC_DTS, path.join(dest, 'index.d.ts'));
+  fs.copyFileSync(SYNC_DTS, path.join(dest, "index.d.ts"));
 }
 
 const CMakeListsTxt = await fs.promises.readFile(
   path.join(SRC_PATH, "CMakeLists.txt"),
-  { encoding: "utf-8" }
+  { encoding: "utf-8" },
 );
 
-console.log('Creating package.json...');
-const packageJsonText = await fs.promises.readFile(path.resolve(".", 'package.json'), 'utf-8');
+console.log("Creating package.json...");
+const packageJsonText = await fs.promises.readFile(
+  path.resolve(".", "package.json"),
+  "utf-8",
+);
 const packageJson = JSON.parse(packageJsonText);
 const lines = CMakeListsTxt.split("\n");
 for (const line of lines) {
@@ -93,15 +126,28 @@ for (const line of lines) {
 }
 delete packageJson.scripts;
 delete packageJson.devDependencies;
-await fs.promises.writeFile(path.resolve(".", 'package', 'package.json'), JSON.stringify(packageJson, null, 2), 'utf-8');
+await fs.promises.writeFile(
+  path.resolve(".", "package", "package.json"),
+  JSON.stringify(packageJson, null, 2),
+  "utf-8",
+);
 
-console.log('Copying LICENSE...');
-await fs.promises.copyFile(path.resolve(SRC_PATH, 'LICENSE'), path.resolve(".", 'package', 'LICENSE'));
+console.log("Copying LICENSE...");
+await fs.promises.copyFile(
+  path.resolve(SRC_PATH, "LICENSE"),
+  path.resolve(".", "package", "LICENSE"),
+);
 
-console.log('Copying README.md...');
-await fs.promises.copyFile(path.resolve('.', 'README.md'), path.resolve(".", 'package', 'README.md'));
+console.log("Copying README.md...");
+await fs.promises.copyFile(
+  path.resolve(".", "README.md"),
+  path.resolve(".", "package", "README.md"),
+);
 
-console.log('Creating tarball...');
-execSync("tar -czf lbug-wasm.tar.gz package", { cwd: path.resolve("."), stdio: "inherit" });
+console.log("Creating tarball...");
+execSync("tar -czf lbug-wasm.tar.gz package", {
+  cwd: path.resolve("."),
+  stdio: "inherit",
+});
 
-console.log('All done!');
+console.log("All done!");
