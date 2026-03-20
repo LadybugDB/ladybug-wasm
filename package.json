@@ -3,6 +3,7 @@
   "version": "0.15.1",
   "description": "Official WebAssembly build of Lbug in-process property graph database management system.",
   "main": "index.js",
+  "types": "index.d.ts",
   "homepage": "https://ladybugdb.com/",
   "repository": {
     "type": "git",
@@ -10,25 +11,31 @@
   },
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "import": "./index.js",
       "require": "./index.js"
     },
     "./sync": {
+      "types": "./sync/index.d.ts",
       "import": "./sync/index.js",
       "require": "./sync/index.js"
     },
     "./multithreaded": {
+      "types": "./multithreaded/index.d.ts",
       "import": "./multithreaded/index.js",
       "require": "./multithreaded/index.js"
     },
     "./multithreaded/sync": {
+      "types": "./multithreaded/sync/index.d.ts",
       "import": "./multithreaded/sync/index.js",
       "require": "./multithreaded/sync/index.js"
     },
     "./nodejs": {
+      "types": "./nodejs/index.d.ts",
       "require": "./nodejs/index.js"
     },
     "./nodejs/sync": {
+      "types": "./nodejs/sync/index.d.ts",
       "require": "./nodejs/sync/index.js"
     }
   },
