@@ -56,6 +56,19 @@ const srcPath = path.resolve('.', 'build');
 const dstPath = path.resolve('.', 'package', 'nodejs');
 fs.cpSync(srcPath, dstPath, { recursive: true });
 
+console.log('Copying TypeScript declarations...');
+const JS_SRC = path.resolve('.', 'src_js');
+const ASYNC_DTS = path.join(JS_SRC, 'index.d.ts');
+const SYNC_DTS = path.join(JS_SRC, 'sync', 'index.d.ts');
+const PKG = path.resolve('.', 'package');
+for (const dest of [PKG, path.join(PKG, 'multithreaded'), path.join(PKG, 'nodejs')]) {
+  fs.mkdirSync(dest, { recursive: true });
+  fs.copyFileSync(ASYNC_DTS, path.join(dest, 'index.d.ts'));
+}
+for (const dest of [path.join(PKG, 'sync'), path.join(PKG, 'multithreaded', 'sync'), path.join(PKG, 'nodejs', 'sync')]) {
+  fs.mkdirSync(dest, { recursive: true });
+  fs.copyFileSync(SYNC_DTS, path.join(dest, 'index.d.ts'));
+}
 
 const CMakeListsTxt = await fs.promises.readFile(
   path.join(SRC_PATH, "CMakeLists.txt"),
