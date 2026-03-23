@@ -567,6 +567,20 @@ else {
       }
     },
 
+    FSMountOpfs(path) {
+      try {
+        const OPFS = FS.filesystems.OPFS;
+        if (!OPFS) {
+          return { error: "OPFS is not available. Ensure the build was compiled with -sWASMFS and -pthread flags.", isSuccess: false };
+        }
+        FS.mount(OPFS, {}, path);
+        return { isSuccess: true };
+      }
+      catch (e) {
+        return { error: e.message, isSuccess: false }
+      }
+    },
+
     async FSSyncfs(populate) {
       try {
         await new Promise((resolve, reject) => {

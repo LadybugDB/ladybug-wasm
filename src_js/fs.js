@@ -141,6 +141,23 @@ class FS {
   }
 
   /**
+   * Mount a directory as the OPFS (Origin Private File System) backend.
+   * OPFS provides persistent storage in the browser without requiring manual
+   * sync calls. Unlike IDBFS, writes are automatically persisted.
+   * Requires the build to be compiled with -sWASMFS and -pthread flags.
+   * @param {String} path the path to the directory.
+   * @throws {Error} if the directory cannot be mounted or OPFS is not
+   * available.
+   */
+  async mountOpfs(path) {
+    const worker = await dispatcher.getWorker();
+    const result = await worker.FSMountOpfs(path);
+    if (!result.isSuccess) {
+      throw new Error(result.error);
+    }
+  }
+
+  /**
    * Unmount a mounted filesystem.
    * @param {String} path the path to the filesystem.
    * @throws {Error} if the filesystem cannot be unmounted.
