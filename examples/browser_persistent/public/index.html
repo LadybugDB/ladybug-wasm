@@ -9,10 +9,12 @@
 
 <body>
     <h1>Lbug WebAssembly Example</h1>
-    <p>This example demonstrates how to use Lbug WebAssembly in a web browser with the persistent IDBFS filesystem.</p>
+    <p>This example demonstrates how to use Lbug WebAssembly in a web browser with the persistent OPFS (Origin Private
+        File System) backend.</p>
     <p>The first run of the example will create a new database and load some data into it. The second run will query the
         database and display the results.</p>
     <p>After running the example for the first time, you can refresh the page to see the query results.</p>
+    <p>Unlike IDBFS, OPFS automatically persists writes — no manual <code>syncfs()</code> calls are needed.</p>
     <p>The output of the queries will be displayed below:</p>
 
     <code id="output"
@@ -27,6 +29,12 @@
         };
         (async () => {
             const isFirstRun = window.localStorage.getItem("isFirstRun") !== "false";
+
+            // Mount OPFS at /database — this is persistent automatically
+            await lbug.FS.mkdir("/database");
+            await lbug.FS.mountOpfs("/database");
+            appendOutput("OPFS mounted at /database.");
+
             if (isFirstRun) {
                 appendOutput("First run detected. Setting up the database...");
                 // Write the data into WASM filesystem
@@ -50,15 +58,9 @@ Noura,Guelph`;
                 await lbug.FS.writeFile("/follows.csv", followsCSV);
                 await lbug.FS.writeFile("/lives-in.csv", livesInCSV);
 
-                // Make a persistent IDBFS directory
-                await lbug.FS.mkdir("/database");
-                await lbug.FS.mountIdbfs("/database");
-                appendOutput("IDBFS mounted.");
-
                 // Create an empty database and connect to it
                 const db = new lbug.Database("/database");
                 const conn = new lbug.Connection(db);
-
 
                 const queries = [
                     // Create the tables
@@ -92,24 +94,13 @@ Noura,Guelph`;
                 await db.close();
                 appendOutput("Database closed.");
 
-                // Sync the filesystem
-                await lbug.FS.syncfs(false);
-                appendOutput("Database persisted to IDBFS.");
-                await lbug.FS.unmount("/database");
-                appendOutput("IDBFS unmounted.");
+                // No syncfs() needed — OPFS persists automatically
+                appendOutput("Database persisted via OPFS (automatic).");
                 window.localStorage.setItem("isFirstRun", "false");
             } else {
                 appendOutput("Second or later run detected. Querying the database...");
-                // Make a persistent IDBFS directory
-                await lbug.FS.mkdir("/database");
-                await lbug.FS.mountIdbfs("/database");
-                appendOutput("IDBFS mounted.");
 
-                // Sync the filesystem
-                await lbug.FS.syncfs(true);
-                appendOutput("Database loaded from IDBFS.");
-
-                // Create a new database and connect to it
+                // Database files are already persisted in OPFS — just open
                 const db = new lbug.Database("/database");
                 const conn = new lbug.Connection(db);
 
@@ -147,11 +138,11 @@ Noura,Guelph`;
                 // Close the database
                 await db.close();
                 appendOutput("Database closed.");
-
-                // Unmount the IDBFS
-                await lbug.FS.unmount("/database");
-                appendOutput("IDBFS unmounted.");
             }
+
+            // Unmount OPFS
+            await lbug.FS.unmount("/database");
+            appendOutput("OPFS unmounted.");
         })();
     </script>
 </body>
