@@ -1,44 +1,38 @@
 const { assert } = require("chai");
-const tmp = require("tmp");
+const fs = require("fs/promises");
 const path = require("path");
 
 describe("Database constructor", function () {
   it("should create a database with a valid path and buffer size", async function () {
-    const tmpDbPath = await new Promise((resolve, reject) => {
-      tmp.dir({ unsafeCleanup: true }, (err, path, _) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(path);
-      });
-    });
-    const dbPath = path.join(tmpDbPath, "db.lbdb");
-    const testDb = new lbug.Database(dbPath, 1 << 28 /* 256MB */);
-    assert.exists(testDb);
-    assert.equal(testDb.constructor.name, "Database");
-    await testDb.init();
-    assert.isTrue(testDb._isInitialized);
-    assert.notExists(testDb._initPromise);
-    await testDb.close();
+    const tmpDbPath = await createTempDir();
+    try {
+      const dbPath = path.join(tmpDbPath, "db.lbdb");
+      const testDb = new lbug.Database(dbPath, 1 << 28 /* 256MB */);
+      assert.exists(testDb);
+      assert.equal(testDb.constructor.name, "Database");
+      await testDb.init();
+      assert.isTrue(testDb._isInitialized);
+      assert.notExists(testDb._initPromise);
+      await testDb.close();
+    } finally {
+      await fs.rm(tmpDbPath, { recursive: true, force: true });
+    }
   });
 
   it("should create a database with a valid path and no buffer size", async function () {
-    const tmpDbPath = await new Promise((resolve, reject) => {
-      tmp.dir({ unsafeCleanup: true }, (err, path, _) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(path);
-      });
-    });
-    const dbPath = path.join(tmpDbPath, "db.lbdb");
-    const testDb = new lbug.Database(dbPath);
-    assert.exists(testDb);
-    assert.equal(testDb.constructor.name, "Database");
-    await testDb.init();
-    assert.isTrue(testDb._isInitialized);
-    assert.notExists(testDb._initPromise);
-    await testDb.close();
+    const tmpDbPath = await createTempDir();
+    try {
+      const dbPath = path.join(tmpDbPath, "db.lbdb");
+      const testDb = new lbug.Database(dbPath);
+      assert.exists(testDb);
+      assert.equal(testDb.constructor.name, "Database");
+      await testDb.init();
+      assert.isTrue(testDb._isInitialized);
+      assert.notExists(testDb._initPromise);
+      await testDb.close();
+    } finally {
+      await fs.rm(tmpDbPath, { recursive: true, force: true });
+    }
   });
 
   it("should create an in-memory database when no path is provided", async function () {

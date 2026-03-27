@@ -7,23 +7,24 @@ chai.config.includeStack = true;
 
 global.lbug = require("../package/nodejs");
 
-const tmp = require("tmp");
 const fs = require("fs/promises");
 const path = require("path");
-const initTests = async () => {
-  const tmpPath = await new Promise((resolve, reject) => {
-    tmp.dir({ unsafeCleanup: true }, (err, path, _) => {
-      if (err) {
-        return reject(err);
-      }
-      return resolve(path);
-    });
-  });
 
+const createTempDir = async () => {
+  const tempRoot = path.join(process.cwd(), ".tmp-lbug-wasm-");
+  return fs.mkdtemp(tempRoot);
+};
+
+const initTests = async () => {
+  const tmpPath = await createTempDir();
   const dbPath = path.join(tmpPath, "db.lbdb");
   await lbug.init();
   const db = new lbug.Database(dbPath, 1 << 30 /* 1GB */);
   const conn = new lbug.Connection(db, 4);
+  global.dbPath = dbPath;
+  global.tmpPath = tmpPath;
+  global.db = db;
+  global.conn = conn;
   const tinysnbDir = "../../dataset/tinysnb/";
 
   const schema = (await fs.readFile(tinysnbDir + "schema.cypher"))
@@ -59,17 +60,28 @@ const initTests = async () => {
   await conn.query(
     'copy moviesSerial from "../../dataset/tinysnb-serial/vMovies.csv"'
   );
-
-  global.dbPath = dbPath;
-  global.db = db;
-  global.conn = conn;
 };
 
 const cleanup = async () => {
-  await conn.close();
-  await db.close();
-  await lbug.close();
+  try {
+    if (global.conn) {
+      await global.conn.close();
+    }
+    if (global.db) {
+      await global.db.close();
+    }
+  } finally {
+    global.conn = null;
+    global.db = null;
+    global.dbPath = null;
+    if (global.tmpPath) {
+      await fs.rm(global.tmpPath, { recursive: true, force: true });
+      global.tmpPath = null;
+    }
+    await lbug.close();
+  }
 };
 
+global.createTempDir = createTempDir;
 global.initTests = initTests;
 global.cleanup = cleanup;
