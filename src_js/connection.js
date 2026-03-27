@@ -8,6 +8,14 @@ const dispatcher = require("./dispatcher.js");
 const QueryResult = require("./query_result.js");
 const PreparedStatement = require("./prepared_statement.js");
 
+async function buildQueryResultChain(headQueryResult) {
+  let currentQueryResult = headQueryResult;
+  while (currentQueryResult.hasNextQueryResult()) {
+    currentQueryResult = await currentQueryResult.getNextQueryResult();
+  }
+  return headQueryResult;
+}
+
 class Connection {
   /**
    * Initialize a new Connection object. Note that the initialization is done
@@ -121,7 +129,7 @@ class Connection {
     }
     const queryResult = new QueryResult(res.id);
     await queryResult._syncValues();
-    return queryResult;
+    return buildQueryResultChain(queryResult);
   }
 
   /**
@@ -157,7 +165,7 @@ class Connection {
     }
     const queryResult = new QueryResult(res.id);
     await queryResult._syncValues();
-    return queryResult;
+    return buildQueryResultChain(queryResult);
   }
 
   /**

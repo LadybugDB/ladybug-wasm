@@ -8,6 +8,14 @@ const LbugWasm = require("./lbug.js");
 const QueryResult = require("./query_result.js");
 const PreparedStatement = require("./prepared_statement.js");
 
+function buildQueryResultChain(headQueryResult) {
+  let currentQueryResult = headQueryResult;
+  while (currentQueryResult.hasNextQueryResult()) {
+    currentQueryResult = currentQueryResult.getNextQueryResult();
+  }
+  return headQueryResult;
+}
+
 class Connection {
   /**
    * Initialize a new Connection object.
@@ -93,7 +101,7 @@ class Connection {
       throw new Error("Statement must be a string.");
     }
     const _queryResult = this._connection.query(statement);
-    return new QueryResult(_queryResult);
+    return buildQueryResultChain(new QueryResult(_queryResult));
   }
 
   /**
@@ -142,7 +150,7 @@ class Connection {
       });
     }
     const _queryResult = this._connection.execute(preparedStatement._statement, paramsArray);
-    return new QueryResult(_queryResult);
+    return buildQueryResultChain(new QueryResult(_queryResult));
   }
 
   /**
