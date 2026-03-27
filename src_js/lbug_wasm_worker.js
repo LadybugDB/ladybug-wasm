@@ -238,10 +238,13 @@ else {
       }
     },
 
-    queryResultClose(id) {
+    queryResultClose(id, childIds = []) {
       if (id in objectsStore) {
         objectsStore[id].close();
         delete objectsStore[id];
+      }
+      for (const childId of childIds) {
+        delete objectsStore[childId];
       }
     },
 

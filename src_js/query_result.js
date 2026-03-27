@@ -11,12 +11,37 @@ class QueryResult {
    * to get a `QueryResult` object.
    * @param {String} id the internal ID of the query result object.
    */
-  constructor(id) {
+  constructor(id, isClosable = true, root = null) {
     this._id = id;
     this._isClosed = false;
+    this._isClosable = isClosable;
     this._hasNext = undefined;
     this._hasNextQueryResult = undefined;
     this._isSuccess = undefined;
+    this._root = root ?? this;
+    if (!this._root._queryResults) {
+      this._root._queryResults = [this];
+    }
+    if (!this._root._childResultIds) {
+      this._root._childResultIds = [];
+    }
+    this._chainIndex = this._root._queryResults.length - 1;
+  }
+
+  get length() {
+    return this._root._queryResults.length;
+  }
+
+  [Symbol.iterator]() {
+    return this._root._queryResults[Symbol.iterator]();
+  }
+
+  at(index) {
+    return this._root._queryResults.at(index);
+  }
+
+  toArray() {
+    return [...this._root._queryResults];
   }
 
   /**
@@ -99,6 +124,9 @@ class QueryResult {
    * @returns {Boolean} true if the query result has a following query result.
    */
   hasNextQueryResult() {
+    if (this._root._queryResults.length > this._chainIndex + 1) {
+      return true;
+    }
     return this._hasNextQueryResult;
   }
 
@@ -194,12 +222,21 @@ class QueryResult {
    * @returns {QueryResult} the next query result.
    */
   async getNextQueryResult() {
+    if (this._root._queryResults.length > this._chainIndex + 1) {
+      return this._root._queryResults[this._chainIndex + 1];
+    }
     const worker = await dispatcher.getWorker();
     const res = await worker.queryResultGetNextQueryResult(this._id);
     if (res.isSuccess) {
       const nextQueryResultId = res.result;
-      const nextQueryResult = new QueryResult(nextQueryResultId);
+      if (!nextQueryResultId) {
+        return null;
+      }
+      const nextQueryResult = new QueryResult(nextQueryResultId, false, this._root);
+      nextQueryResult._chainIndex = this._root._queryResults.length;
       await nextQueryResult._syncValues();
+      this._root._queryResults.push(nextQueryResult);
+      this._root._childResultIds.push(nextQueryResultId);
       return nextQueryResult;
     } else {
       throw new Error(res.error);
@@ -256,8 +293,10 @@ class QueryResult {
    */
   async close() {
     if (!this._isClosed) {
-      const worker = await dispatcher.getWorker();
-      await worker.queryResultClose(this._id);
+      if (this._isClosable) {
+        const worker = await dispatcher.getWorker();
+        await worker.queryResultClose(this._id, this._childResultIds);
+      }
       this._isClosed = true;
     }
   }

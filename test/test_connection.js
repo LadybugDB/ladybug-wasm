@@ -169,6 +169,23 @@ describe("Query", function () {
     await queryResult.close();
   });
 
+  it("should expose multiple queries as an iterable result collection", async function () {
+    const queryResults = await conn.query(`
+      RETURN 1;
+      RETURN 2;
+      RETURN 3;
+    `);
+    assert.equal(queryResults.length, 3);
+    let expectedValue = 1;
+    for (const queryResult of queryResults) {
+      assert.equal(await queryResult.getNumTuples(), 1);
+      assert.isTrue(queryResult.hasNext());
+      assert.deepEqual(await queryResult.getNext(), [expectedValue]);
+      expectedValue += 1;
+    }
+    await queryResults.close();
+  });
+
   it("should throw error if one of the multiple queries is invalid", async function () {
     try {
       const _ = await conn.query(`

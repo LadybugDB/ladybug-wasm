@@ -23,6 +23,18 @@ export interface QuerySummary {
  * Obtain via Connection.query() or Connection.execute().
  */
 export declare class QueryResult {
+  /** Number of statement results returned by the query. */
+  readonly length: number;
+
+  /** Iterate over each statement result in order. */
+  [Symbol.iterator](): Iterator<QueryResult>;
+
+  /** Returns the statement result at the given index. */
+  at(index: number): QueryResult | undefined;
+
+  /** Returns all statement results as an array. */
+  toArray(): QueryResult[];
+
   /** Returns true if the query executed successfully. */
   isSuccess(): boolean;
 

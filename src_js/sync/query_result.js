@@ -11,10 +11,31 @@ class QueryResult {
    * to get a `QueryResult` object.
    * @param {lbug.sync.QueryResult} _queryResult the native query result object.
    */
-  constructor(_queryResult, _isClosable = true) {
+  constructor(_queryResult, _isClosable = true, root = null) {
     this._result = _queryResult;
     this._isClosed = false;
     this._isClosable = _isClosable;
+    this._root = root ?? this;
+    if (!this._root._queryResults) {
+      this._root._queryResults = [this];
+    }
+    this._chainIndex = this._root._queryResults.length - 1;
+  }
+
+  get length() {
+    return this._root._queryResults.length;
+  }
+
+  [Symbol.iterator]() {
+    return this._root._queryResults[Symbol.iterator]();
+  }
+
+  at(index) {
+    return this._root._queryResults.at(index);
+  }
+
+  toArray() {
+    return [...this._root._queryResults];
   }
 
   /**
@@ -77,6 +98,9 @@ class QueryResult {
    */
   hasNextQueryResult() {
     this._checkQueryResult();
+    if (this._root._queryResults.length > this._chainIndex + 1) {
+      return true;
+    }
     return this._result.hasNextQueryResult();
   }
 
@@ -149,7 +173,13 @@ class QueryResult {
    */
   getNextQueryResult() {
     this._checkQueryResult();
-    return new QueryResult(this._result.getNextQueryResult(), false);
+    if (this._root._queryResults.length > this._chainIndex + 1) {
+      return this._root._queryResults[this._chainIndex + 1];
+    }
+    const nextQueryResult = new QueryResult(this._result.getNextQueryResult(), false, this._root);
+    nextQueryResult._chainIndex = this._root._queryResults.length;
+    this._root._queryResults.push(nextQueryResult);
+    return nextQueryResult;
   }
 
   /**
