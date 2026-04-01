@@ -37,6 +37,15 @@ class lbug {
     this.checkInit();
     return this._lbug.wasmMemory;
   }
+
+  /**
+   * Return the raw Emscripten module object. Used internally by the worker to
+   * call low-level WasmFS helpers (e.g. _wasmfs_create_opfs_backend).
+   */
+  getModule() {
+    this.checkInit();
+    return this._lbug;
+  }
 }
 
 const lbugInstance = new lbug();

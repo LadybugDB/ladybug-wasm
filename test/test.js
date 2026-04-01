@@ -18,6 +18,7 @@ describe("lbug-wasm", function () {
   importTest("Query parameters", "./test_parameter.js");
   importTest("Concurrent query execution", "./test_concurrency.js");
   importTest("Version", "./test_version.js");
+  importTest("OPFS persistent storage", "./test_opfs.js");
 
   after(() => {
     return cleanup();
