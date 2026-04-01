@@ -180,9 +180,9 @@ describe("Query", function () {
     for (const queryResult of queryResults) {
       assert.equal(await queryResult.getNumTuples(), 1);
       assert.isTrue(queryResult.hasNext());
-      // next line fails with a strange [1] is not equal to [1] message
-      // probably related to types. Debug later.
-      // assert.deepEqual(await queryResult.getNext(), [expectedValue]);
+      const row = await queryResult.getNext();
+      assert.equal(row.length, 1);
+      assert.equal(row[0].valueOf(), expectedValue);
       expectedValue += 1;
     }
     await queryResults.close();
