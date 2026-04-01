@@ -8,6 +8,7 @@ const { expose, isWorkerRuntime, Transfer } = require('threads/worker');
 const { v4: uuidv4 } = require('uuid');
 const objectsStore = {};
 let FS = null;
+let wasmModule = null;
 const lbugSync = require('./sync');
 
 if (!isWorkerRuntime) {
@@ -19,6 +20,7 @@ else {
       try {
         await lbugSync.init();
         FS = lbugSync.getFS();
+        wasmModule = lbugSync.getModule();
         return { isSuccess: true };
       }
       catch (e) {
@@ -568,16 +570,47 @@ else {
     },
 
     FSMountOpfs(path) {
+      // Legacy Emscripten FS uses FS.filesystems / FS.mount(), but builds
+      // that use -sWASMFS have an entirely different FS implementation that
+      // does not populate FS.filesystems. OPFS-backed directories must be
+      // created via the WasmFS C API instead:
+      //
+      //   backend_t wasmfs_create_opfs_backend(void);
+      //   int       wasmfs_create_directory(const char *path, int mode,
+      //                                     backend_t b);
+      //
+      // Both symbols are exported with -sEXPORTED_FUNCTIONS in the browser
+      // (WasmFS) build. OPFS requires SharedArrayBuffer + pthreads; the
+      // single-threaded browser build compiles the symbols in for API
+      // completeness but they will fail at runtime.
       try {
-        const OPFS = FS.filesystems.OPFS;
-        if (!OPFS) {
-          return { error: "OPFS is not available. Ensure the build was compiled with -sWASMFS and -pthread flags.", isSuccess: false };
+        if (!wasmModule ||
+            typeof wasmModule._wasmfs_create_opfs_backend !== 'function' ||
+            typeof wasmModule._wasmfs_create_directory !== 'function') {
+          return {
+            error: "OPFS is not available. Ensure the build was compiled " +
+                   "with -sWASMFS, -lopfs.js, and -pthread (multi-threaded " +
+                   "browser build).",
+            isSuccess: false,
+          };
         }
-        FS.mount(OPFS, {}, path);
+        const backend = wasmModule._wasmfs_create_opfs_backend();
+        // allocateUTF8 is exported via -sEXPORTED_RUNTIME_METHODS; it
+        // malloc-s a null-terminated UTF-8 copy of the JS string in the
+        // WASM heap and returns the pointer. The caller must _free it.
+        const pathPtr = wasmModule.allocateUTF8(path);
+        const errno = wasmModule._wasmfs_create_directory(pathPtr, 0o777, backend);
+        wasmModule._free(pathPtr);
+        if (errno !== 0) {
+          return {
+            error: `wasmfs_create_directory('${path}') failed with errno ${errno}`,
+            isSuccess: false,
+          };
+        }
         return { isSuccess: true };
       }
       catch (e) {
-        return { error: e.message, isSuccess: false }
+        return { error: e.message, isSuccess: false };
       }
     },
 

@@ -63,6 +63,16 @@ module.exports = {
     return LbugWasm.getWasmMemory();
   },
 
+  /**
+   * Get the raw Emscripten module object. Used internally to access low-level
+   * WasmFS APIs such as _wasmfs_create_opfs_backend.
+   * @memberof module:lbug-wasm
+   * @returns {Object} the Emscripten module object.
+   */
+  getModule: () => {
+    return LbugWasm.getModule();
+  },
+
   Database,
   Connection,
   PreparedStatement,
