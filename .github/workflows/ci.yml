@@ -46,6 +46,13 @@ jobs:
           curl -fsSL https://github.com/LadybugDB/ladybug/archive/refs/heads/main.tar.gz \
             | tar -xz --strip-components=1 --exclude='*/tools/wasm'
 
+      - name: Checkout test dataset
+        uses: actions/checkout@v4
+        with:
+          repository: LadybugDB/dataset
+          fetch-depth: 1
+          path: dataset
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
