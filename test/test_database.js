@@ -35,6 +35,29 @@ describe("Database constructor", function () {
     }
   });
 
+  it("should run a query against an on-disk database with an absolute path", async function () {
+    const tmpDbPath = await createTempDir();
+    let conn = null;
+    let testDb = null;
+    try {
+      const dbPath = path.resolve(tmpDbPath, "db.lbdb");
+      testDb = new lbug.Database(dbPath);
+      conn = new lbug.Connection(testDb);
+      const result = await conn.query(
+        "CREATE NODE TABLE T(id STRING PRIMARY KEY);"
+      );
+      await result.close();
+    } finally {
+      if (conn && conn._isInitialized) {
+        await conn.close();
+      }
+      if (testDb && testDb._isInitialized) {
+        await testDb.close();
+      }
+      await fs.rm(tmpDbPath, { recursive: true, force: true });
+    }
+  });
+
   it("should create an in-memory database when no path is provided", async function () {
     const testDb = new lbug.Database();
     const conn = new lbug.Connection(testDb);
