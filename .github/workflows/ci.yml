@@ -80,6 +80,7 @@ jobs:
           mkdir package
           tar -xzf "${package_tgz}" -C package --strip-components=1
           node -e "const pkg = require('./package/package.json'); console.log(pkg.name + '@' + pkg.version)"
+          node -e "const fs = require('fs'); const pkg = require('./package.json'); pkg.version = process.env.LADYBUG_WASM_VERSION; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');"
 
       - name: Run API tests
         working-directory: tools/wasm
