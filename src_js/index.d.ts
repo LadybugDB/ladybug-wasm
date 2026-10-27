@@ -120,13 +120,14 @@ export declare class PreparedStatement {
  */
 export declare class Database {
   /**
+   * Any setting left undefined uses the engine default; explicitly set settings override it.
    * @param databasePath       Path on disk, or `:memory:` / `""` for in-memory. Defaults to `:memory:`.
-   * @param bufferPoolSize     Buffer pool size in bytes. 0 = use default.
-   * @param maxNumThreads      Maximum threads for parallel query execution. 0 = use all available.
-   * @param enableCompression  Whether to compress column data on disk. Default true.
-   * @param readOnly           Open the database in read-only mode. Default false.
-   * @param autoCheckpoint     Enable automatic WAL checkpointing. Default true.
-   * @param checkpointThreshold WAL size threshold (bytes) that triggers a checkpoint. Default 16 MB.
+   * @param bufferPoolSize     Buffer pool size in bytes (engine default if omitted).
+   * @param maxNumThreads      Maximum threads for parallel query execution (engine default if omitted).
+   * @param enableCompression  Whether to compress column data on disk (engine default if omitted).
+   * @param readOnly           Open the database in read-only mode (engine default if omitted).
+   * @param autoCheckpoint     Enable automatic WAL checkpointing (engine default if omitted).
+   * @param checkpointThreshold WAL size threshold (bytes) that triggers a checkpoint (engine default if omitted).
    */
   constructor(
     databasePath?: string,
