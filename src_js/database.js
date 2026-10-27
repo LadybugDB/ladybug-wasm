@@ -25,14 +25,16 @@ class Database {
    * @param {Number} checkpointThreshold threshold for automatic checkpointing 
    * in bytes. Default is 16MB.
    */
+  // Settings default to null (= engine default); they are forwarded as-is to
+  // the sync implementation, which only applies non-null values.
   constructor(
     databasePath,
-    bufferPoolSize = 0,
-    maxNumThreads = 0,
-    enableCompression = true,
-    readOnly = false,
-    autoCheckpoint = true,
-    checkpointThreshold = 16777216
+    bufferPoolSize = null,
+    maxNumThreads = null,
+    enableCompression = null,
+    readOnly = null,
+    autoCheckpoint = null,
+    checkpointThreshold = null
   ) {
     this._isInitialized = false;
     this._initPromise = null;
